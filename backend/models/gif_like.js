@@ -1,30 +1,15 @@
-"use strict";
-const { Model } = require("sequelize");
-module.exports = (sequelize, DataTypes) => {
-    class Gif_like extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
-        static associate(User) {
-            this.belongsTo(User, { foreignKey: "userid" });
-        }
-        static associate({ Gif }) {
-            this.belongsTo(Gif, { foreignKey: "Gifid" });
-        }
-    }
-    Gif_like.init(
-        {
-            jaime: DataTypes.BOOLEAN,
-            jaimepas: DataTypes.BOOLEAN,
-            userid: DataTypes.NUMBER,
-            gifid: DataTypes.NUMBER,
-        },
-        {
-            sequelize,
-            modelName: "Gif_like",
-        }
-    );
-    return Gif_like;
-};
+const Sequelize = require("sequelize");
+const db = require("../config/config");
+
+const Gif_likes = db.define("gif_likes", {
+    jaime: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+    },
+    jaimepas: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+    },
+});
+
+module.exports = Gif_likes;

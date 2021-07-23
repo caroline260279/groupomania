@@ -29,6 +29,9 @@ const validPassword = require("../middelware/password");
 router.post("/signup", userCtrl.signup);
 //route de login
 router.post("/login", limiter, userCtrl.login);
+//route de suppression du user
+/*
+router.delete("/delete", limiter, userCtrl.delete);*/
 
 //exportation du router
 module.exports = router;
