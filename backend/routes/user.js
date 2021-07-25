@@ -3,6 +3,8 @@ const express = require("express");
 //création du router express
 const router = express.Router();
 
+const auth = require("../middelware/auth");
+
 //importation de la "logique métier" des sauces (les fonctions)
 const userCtrl = require("../controllers/user");
 
@@ -30,8 +32,7 @@ router.post("/signup", userCtrl.signup);
 //route de login
 router.post("/login", limiter, userCtrl.login);
 //route de suppression du user
-/*
-router.delete("/delete", limiter, userCtrl.delete);*/
+router.delete("/delete", auth, limiter, userCtrl.delete);
 
 //exportation du router
 module.exports = router;

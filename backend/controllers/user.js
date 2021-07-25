@@ -74,32 +74,50 @@ exports.login = (req, res, next) => {
                     //sinon requête ok
                     res.status(200).json({
                         //renvoie le userId
-                        userid: users.userid,
+                        userid: users.id,
                         //renvoie un token avec jsonwebtoken
                         //appel de la fonction sign de jsonwebtoken
                         //le userId encoder permettra de ne pas pouvoir modifier un objet si on ne l'a pas crée
                         token: jwt.sign(
                             //les données que l'on souhaite encoder
                             {
-                                userid: users._id,
+                                userid: users.id,
                             },
                             //clef secrète d'encodage
                             "RANDOM_TOKEN_SECRET",
                             //on applique une expiration
-                            {
-                                expiresIn: "24h",
-                            }
+                            { expiresIn: "24h" }
                         ),
                     });
-                })
+                }); /*
                 //sinon renvoie un probème de connexion
                 .catch((error) =>
                     res.status(500).json({
                         error,
                     })
-                );
+                );*/
         })
         //sinon renvoie un probème de connexion
+        .catch((error) =>
+            res.status(500).json({
+                error,
+            })
+        );
+};
+//suppression de la sauce selectionnée
+exports.delete = (req, res, next) => {
+    model.User.findOne({
+        //l'adresse mail doit correspondre à l'adresse mail de la requête
+        where: { email: req.body.email },
+    })
+        //renvoie le user
+        .then((users) => {
+            users
+                .destroy({ userid: users.userid })
+                .then(() =>
+                    res.status(200).json({ message: "Utilisateur supprimé !" })
+                );
+        })
         .catch((error) =>
             res.status(500).json({
                 error,

@@ -15,10 +15,10 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
 
         //on recupere le userId encodé
-        const userId = decodedToken.userId;
+        const userId = decodedToken.userid;
 
-        //si le userId ne correspond pas à celui de la requête, renvoie "Utilisateur non valie"
-        if (req.body.userId && req.body.userId !== userId) {
+        //si il y a un userid et qu'il ne correspond pas à celui de la requête, renvoie "Utilisateur non valie"
+        if (req.body.userid && req.body.userid !== userId) {
             throw "Utilisateur non valide";
         }
         //sinon on passe au middelware suivant
@@ -28,7 +28,7 @@ module.exports = (req, res, next) => {
     } catch (error) {
         //revoie une erreur ou "requête non authentifiée"
         res.status(401).json({
-            error: error | "Requête non authentifiée !",
+            message: "Requête non authentifiée !",
         });
     }
 };
