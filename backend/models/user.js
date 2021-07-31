@@ -14,6 +14,14 @@ const Users = db.define("users", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    photo: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    bio: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
     email: {
         type: Sequelize.STRING,
         allowNull: false,

@@ -16,14 +16,16 @@ const multer = require("../middelware/multer-config");
 
 //route pour créer une sauce nécessite l'authentification et multer pour l'image
 router.post("/", auth, multer, gifCtrl.createGif);
+//route pour récupérer une sauce, necessite l'authentification
+router.get("/:id", auth, gifCtrl.getOneGif);
+//route pour modifier une sauce, necessite l'authentification et multer pour l'image
+router.put("/modify/:id", auth, multer, gifCtrl.modifyGif);
+//route pour supprime une sauce, necessite l'authentification
+router.delete("/delete/:id", auth, gifCtrl.deleteGif);
 //route pour récupérer toutes les sauces, necessite l'authentification
 router.get("/gif", gifCtrl.getAllGif);
-//route pour récupérer une sauce, necessite l'authentification
-router.get("/gifid", gifCtrl.getOneGif);
-//route pour modifier une sauce, necessite l'authentification et multer pour l'image
-router.put("/gifid/modify", auth, multer, gifCtrl.modifyGif);
-//route pour supprime une sauce, necessite l'authentification
-router.delete("/gifid/delete", auth, gifCtrl.deleteGif);
+//route pour récupérer toutes les sauces d'un user, necessite l'authentification
+router.get("/gif/user", gifCtrl.getAllGifUser);
 //route pour liker ou disliker une sauce, necessite l'authentification
 router.post("/like", gifCtrl.likeGif);
 

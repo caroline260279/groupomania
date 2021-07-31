@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 
 //création du middelware signup
 exports.signup = (req, res, next) => {
+    console.log(req.body);
     //hachage du mdp avec 10 tours de l'algorithme
     bcrypt
         .hash(req.body.password, 10)
@@ -22,6 +23,10 @@ exports.signup = (req, res, next) => {
                 name: req.body.name,
                 firstname: req.body.firstname,
                 username: req.body.username,
+                bio: req.body.bio,
+                photo: `${req.protocol}://${req.get("host")}/images/${
+                    req.file.filename
+                }`,
                 //et avec le hash comme mdp
                 password: hash,
             })
@@ -89,13 +94,13 @@ exports.login = (req, res, next) => {
                             { expiresIn: "24h" }
                         ),
                     });
-                }); /*
+                })
                 //sinon renvoie un probème de connexion
                 .catch((error) =>
                     res.status(500).json({
                         error,
                     })
-                );*/
+                );
         })
         //sinon renvoie un probème de connexion
         .catch((error) =>
@@ -120,6 +125,62 @@ exports.delete = (req, res, next) => {
         })
         .catch((error) =>
             res.status(500).json({
+                error,
+            })
+        );
+};
+
+//Trouver un user avec un username
+exports.findUser = (req, res, next) => {
+    model.User.findOne({ where: { username: req.body.username } })
+        .then((users) => {
+            if (!users) {
+                return res.status(401).json({
+                    error: "Utilisateur non trouvé !",
+                });
+            }
+            res.status(200).send(users);
+        })
+        .catch((error) => res.status(400).json({ error }));
+};
+
+//Trouver un user avec un clic
+exports.findOneUser = (req, res, next) => {
+    model.User.findOne({ where: { id: req.params.id } })
+        .then((users) => {
+            if (!users) {
+                return res.status(401).json({
+                    error: "Utilisateur non trouvé !",
+                });
+            }
+            res.status(200).send(users);
+        })
+        .catch((error) => res.status(400).json({ error }));
+};
+
+exports.findAllUser = (req, res, next) => {
+    model.User.findAll()
+        .then((users) => res.status(200).send(users))
+        .catch((error) => res.status(400).json({ error }));
+};
+
+exports.modify = (req, res, next) => {
+    const userObject = req.file
+        ? {
+              ...req.body,
+              photo: `${req.protocol}://${req.get("host")}/images/${
+                  req.file.filename
+              }`,
+          }
+        : { ...req.body };
+    console.log(userObject);
+    model.User.update(
+        { ...userObject, id: req.params.id },
+        { where: { id: req.params.id } }
+    )
+        .then(() => res.status(200).json({ message: "Utilisateur modifié !" }))
+        .catch((error) =>
+            res.status(400).json({
                 error,
             })
         );

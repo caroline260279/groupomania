@@ -18,7 +18,9 @@ exports.createGif = (req, res, next) => {
     model.Gif.create({
         userid: userId,
         title: req.body.title,
-        imageUrl: req.body.imageUrl,
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+        }`,
     })
         .then(() =>
             res.status(201).json({
@@ -32,26 +34,74 @@ exports.createGif = (req, res, next) => {
         );
 };
 
-//accéder aux informations d'une sauce en particulier
+//accéder aux informations d'un gif en particulier
 exports.getOneGif = (req, res, next) => {
-    res.status(200).send("getOneGif");
+    model.Gif.findOne({ where: { id: req.params.id } })
+        .then((gifs) => res.status(200).send(gifs))
+        .catch((error) => res.status(400).json({ error }));
 };
 
-//modification de la sauce selectionnée
+//modification du gif selectionné
 exports.modifyGif = (req, res, next) => {
-    res.status(200).send("modifyGif");
+    const gifObject = req.file
+        ? {
+              ...req.body,
+              imageUrl: `${req.protocol}://${req.get("host")}/images/${
+                  req.file.filename
+              }`,
+          }
+        : { ...req.body };
+    model.Gif.update(
+        { ...gifObject, id: req.params.id },
+        { where: { id: req.params.id } }
+    )
+        .then(() => res.status(200).json({ message: "Gif modifié !" }))
+        .catch((error) =>
+            res.status(400).json({
+                error,
+            })
+        );
 };
 
-//suppression de la sauce selectionnée
+//suppression du gif selectionné
 exports.deleteGif = (req, res, next) => {
-    res.status(200).send("deleteGif");
+    console.log(req.params.id);
+    model.Gif.findOne({ where: { id: req.params.id } })
+        .then((gifs) => {
+            const filename = gifs.imageUrl.split("/images/")[1];
+            //on utilise la fonction unlink du package fs pour supprimer ce fichier
+            fs.unlink(`images/${filename}`, () => {
+                //une fois le fichier supprimer on supprime le gif de la base de données
+                model.Gif.destroy({ where: { id: req.params.id } })
+                    .then(() =>
+                        res.status(200).json({ message: "gif supprimé !" })
+                    )
+                    .catch((error) => res.status(400).json({ error }));
+            });
+        })
+        .catch((error) => {
+            res.status(400).json({
+                error: error,
+            });
+        });
 };
 
-//récupération de toutes les sauces
+//récupération de tous les gifs
 exports.getAllGif = (req, res, next) => {
-    res.status(200).send("getAllGif");
+    model.Gif.findAll({ order: ["updateAt", "ASC"] }).then((gifs) => {
+        res.status(200).json(gifs);
+    });
+    /* .catch((error) => {
+            res.status(400).json({
+                error: error,
+            });
+        });*/
 };
 
+//récupération de tous les gifs d'un user
+exports.getAllGifUser = (req, res, next) => {
+    res.status(200).send("gifUser");
+};
 //mettre un like ou un dislike, ajouter l'utilisateur
 exports.likeGif = (req, res, next) => {
     res.status(200).send("likeGif");
