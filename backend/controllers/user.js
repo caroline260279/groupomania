@@ -143,6 +143,18 @@ exports.findUser = (req, res, next) => {
         })
         .catch((error) => res.status(400).json({ error }));
 };
+//revoyer un utilisateur si le jeton est valide
+exports.userConnected = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
+    const userId = decodedToken.userid;
+
+    model.User.findOne({
+        where: { id: userId },
+    })
+        .then((users) => res.status(200).send(users))
+        .catch((error) => res.status(400).json({ error }));
+};
 
 //Trouver un user avec un clic
 exports.findOneUser = (req, res, next) => {
@@ -165,23 +177,63 @@ exports.findAllUser = (req, res, next) => {
 };
 
 exports.modify = (req, res, next) => {
-    const userObject = req.file
-        ? {
-              ...req.body,
-              photo: `${req.protocol}://${req.get("host")}/images/${
-                  req.file.filename
-              }`,
-          }
-        : { ...req.body };
-    console.log(userObject);
-    model.User.update(
-        { ...userObject, id: req.params.id },
-        { where: { id: req.params.id } }
-    )
-        .then(() => res.status(200).json({ message: "Utilisateur modifié !" }))
-        .catch((error) =>
-            res.status(400).json({
-                error,
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
+    const userId = decodedToken.userid;
+    console.log(userId != req.params.id);
+    if (userId != req.params.id) {
+        return res.status(401).json({
+            error: "Vous n'êtes pas autorisé à modifier cette utilisateur !",
+        });
+    } else {
+        const userObject = req.file
+            ? {
+                  ...req.body,
+                  photo: `${req.protocol}://${req.get("host")}/images/${
+                      req.file.filename
+                  }`,
+              }
+            : { ...req.body };
+
+        model.User.update(
+            { ...userObject, id: req.params.id },
+            { where: { id: req.params.id } }
+        )
+            .then(() =>
+                res.status(200).json({ message: "Utilisateur modifié !" })
+            )
+            .catch((error) =>
+                res.status(400).json({
+                    error,
+                })
+            );
+    }
+};
+//modification du mot de passe
+exports.updatePw = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
+    const userId = decodedToken.userid;
+    if (userId != req.params.id) {
+        return res.status(401).json({
+            error: "Vous n'êtes pas autorisé à modifier le mot de passe !",
+        });
+    } else {
+        bcrypt
+            .hash(req.body.password, 10)
+            .then((hash) => {
+                model.User.update(
+                    { password: hash, id: req.params.id },
+                    { where: { id: req.params.id } }
+                );
             })
-        );
+            .then(() =>
+                res.status(200).json({ message: "Mot de passe modifié !" })
+            )
+            .catch((error) =>
+                res.status(400).json({
+                    error,
+                })
+            );
+    }
 };

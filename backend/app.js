@@ -7,10 +7,12 @@ const path = require("path");
 //importation du packae helmet
 const helmet = require("helmet");
 
-//importation du router sauces
+//importation du router gif
 const gifRoutes = require("./routes/gif");
 //importation du router user
 const userRoutes = require("./routes/user");
+//importation du router like
+const likeRoutes = require("./routes/like");
 
 const db = require("./config/config");
 
@@ -48,6 +50,8 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/", gifRoutes);
 //routeur pour toutes les demandes effectuées vers /api/auth
 app.use("/auth", userRoutes);
+//routeur pour toutes les demandes effectuées vers /api/auth
+app.use("/", likeRoutes);
 
 //sécurise l'applications Express en définissant divers en-têtes HTTP
 app.use(helmet());

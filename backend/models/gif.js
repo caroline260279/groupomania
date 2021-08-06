@@ -15,6 +15,10 @@ const Gifs = db.define("gifs", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+    },
 });
 
 module.exports = Gifs;

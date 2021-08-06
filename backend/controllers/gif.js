@@ -1,15 +1,15 @@
-//création de la logique métier pour les sauces
+//création de la logique métier pour les gifs
 
 //importation du package jsonwebtoken
 const jwt = require("jsonwebtoken");
 
-//importation du model de données pour les sauces
+//importation du model de données pour les gifs
 const model = require("../models/index");
 
 //importation du package fs (file system)
 const fs = require("fs");
 
-//création d'une nouvelle sauce
+//création d'un gif
 exports.createGif = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
@@ -42,25 +42,39 @@ exports.getOneGif = (req, res, next) => {
 };
 
 //modification du gif selectionné
-exports.modifyGif = (req, res, next) => {
-    const gifObject = req.file
-        ? {
-              ...req.body,
-              imageUrl: `${req.protocol}://${req.get("host")}/images/${
-                  req.file.filename
-              }`,
-          }
-        : { ...req.body };
-    model.Gif.update(
-        { ...gifObject, id: req.params.id },
-        { where: { id: req.params.id } }
-    )
-        .then(() => res.status(200).json({ message: "Gif modifié !" }))
-        .catch((error) =>
-            res.status(400).json({
-                error,
-            })
-        );
+exports.modifyGif = async (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
+    const userId = decodedToken.userid;
+
+    const result = await model.Gif.findOne({
+        where: { id: req.params.id },
+    });
+    if (!(userId === result.userid)) {
+        return res.status(401).json({
+            error: "Vous n'êtes pas autorisé à modifier ce gif !",
+        });
+    } else {
+        const gifObject = req.file
+            ? {
+                  ...req.body,
+                  imageUrl: `${req.protocol}://${req.get("host")}/images/${
+                      req.file.filename
+                  }`,
+              }
+            : { ...req.body };
+
+        model.Gif.update(
+            { ...gifObject, id: req.params.id },
+            { where: { id: req.params.id } }
+        )
+            .then(() => res.status(200).json({ message: "Gif modifié !" }))
+            .catch((error) =>
+                res.status(400).json({
+                    error,
+                })
+            );
+    }
 };
 
 //suppression du gif selectionné
@@ -87,22 +101,31 @@ exports.deleteGif = (req, res, next) => {
 };
 
 //récupération de tous les gifs
-exports.getAllGif = (req, res, next) => {
-    model.Gif.findAll({ order: ["updateAt", "ASC"] }).then((gifs) => {
-        res.status(200).json(gifs);
+exports.getAllGifUser = async (req, res, next) => {
+    const userTofind = await model.User.findOne({
+        where: { username: req.params.username },
     });
-    /* .catch((error) => {
+    userId = userTofind.id;
+    model.Gif.findAll({ where: { userid: userId } })
+        .then((gifs) => {
+            res.status(200).send(gifs);
+        })
+        .catch((error) => {
             res.status(400).json({
                 error: error,
             });
-        });*/
+        });
 };
 
-//récupération de tous les gifs d'un user
-exports.getAllGifUser = (req, res, next) => {
-    res.status(200).send("gifUser");
-};
-//mettre un like ou un dislike, ajouter l'utilisateur
-exports.likeGif = (req, res, next) => {
-    res.status(200).send("likeGif");
+//récupération de tous les gifs
+exports.getAllGif = (req, res, next) => {
+    model.Gif.findAll({ order: [["createdAt", "DESC"]] })
+        .then((gifs) => {
+            res.status(200).send(gifs);
+        })
+        .catch((error) => {
+            res.status(400).json({
+                error: error,
+            });
+        });
 };
