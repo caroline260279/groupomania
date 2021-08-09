@@ -13,6 +13,8 @@ const gifRoutes = require("./routes/gif");
 const userRoutes = require("./routes/user");
 //importation du router like
 const likeRoutes = require("./routes/like");
+//importation du router comment
+const commentRoutes = require("./routes/comment");
 
 const db = require("./config/config");
 
@@ -46,12 +48,14 @@ app.use(express.json());
 //création d'un middelware qui permet de servir le dossier image lors d'une requête
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-//routeur pour toutes les demandes effectuées vers /api/sauces
+//routeur pour toutes les demandes effectuées pour les gifs
 app.use("/", gifRoutes);
-//routeur pour toutes les demandes effectuées vers /api/auth
+//routeur pour toutes les demandes effectuées pour l'utilisateur
 app.use("/auth", userRoutes);
-//routeur pour toutes les demandes effectuées vers /api/auth
+//routeur pour toutes les demandes effectuées pour les likes/dislikes
 app.use("/", likeRoutes);
+//routeur pour toutes les demandes effectuées pour les commentaires
+app.use("/", commentRoutes);
 
 //sécurise l'applications Express en définissant divers en-têtes HTTP
 app.use(helmet());

@@ -6,5 +6,61 @@ const jwt = require("jsonwebtoken");
 //importation du model de données pour les sauces
 const model = require("../models/index");
 
-//importation du package fs (file system)
-const fs = require("fs");
+exports.createComment = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
+    const userId = decodedToken.userid;
+    let commentGif = req.body.comment;
+    model.Gif_comment.create({
+        comment: commentGif,
+        userid: userId,
+        gifid: req.params.id,
+    })
+        .then(() =>
+            res.status(201).json({
+                message: "commentaire créé !",
+            })
+        )
+        .catch((error) =>
+            res.status(400).json({
+                error,
+            })
+        );
+};
+exports.modifyComment = async (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
+    const userId = decodedToken.userid;
+
+    const result = await model.Gif_comment.findOne({
+        where: { id: req.params.id },
+    });
+    if (!(userId === result.userid)) {
+        return res.status(401).json({
+            error: "Vous n'êtes pas autorisé à modifier ce commentaire !",
+        });
+    } else {
+        model.Gif_comment.update(
+            { comment: req.body.comment },
+            {
+                where: { id: req.params.id },
+            }
+        )
+            .then(() =>
+                res.status(200).json({
+                    message: "commentaire modifié!",
+                })
+            )
+            .catch((error) =>
+                res.status(400).json({
+                    error,
+                })
+            );
+    }
+};
+//accéder aux informations d'un commentaire en particulier
+exports.getOneComment = (req, res, next) => {
+    model.Gif_comment.findOne({ where: { id: req.params.id } })
+        .then((Gif_comment) => res.status(200).send(Gif_comment))
+        .catch((error) => res.status(400).json({ error }));
+};

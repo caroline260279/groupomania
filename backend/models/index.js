@@ -8,11 +8,26 @@ User.hasMany(Gif_comment);
 User.hasMany(Gif_like);
 Gif.hasMany(Gif_comment);
 Gif.hasMany(Gif_like);
-Gif.belongsTo(User);
-Gif_comment.belongsTo(User);
-Gif_comment.belongsTo(Gif);
-Gif_like.belongsTo(User);
-Gif_like.belongsTo(Gif);
+Gif.belongsTo(User, {
+    foreignKeyConstraint: true,
+    onDelete: "cascade",
+});
+Gif_comment.belongsTo(User, {
+    foreignKeyConstraint: true,
+    onDelete: "cascade",
+});
+Gif_comment.belongsTo(Gif, {
+    foreignKeyConstraint: true,
+    onDelete: "cascade",
+});
+Gif_like.belongsTo(User, {
+    foreignKeyConstraint: true,
+    onDelete: "cascade",
+});
+Gif_like.belongsTo(Gif, {
+    foreignKeyConstraint: true,
+    onDelete: "cascade",
+});
 
 module.exports = {
     User,
