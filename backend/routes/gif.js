@@ -23,9 +23,9 @@ router.put("/modify/:id", auth, multer, gifCtrl.modifyGif);
 //route pour supprime une sauce, necessite l'authentification
 router.delete("/delete/:id", auth, gifCtrl.deleteGif);
 //route pour récupérer toutes les sauces d'un user, necessite l'authentification
-router.get("/gif/:username", gifCtrl.getAllGifUser);
+router.get("/gif/:username", auth, gifCtrl.getAllGifUser);
 //route pour récupérer toutes les sauces, necessite l'authentification
-router.post("/gif", gifCtrl.getAllGif);
+router.post("/gif", auth, gifCtrl.getAllGif);
 
 //exportation du router
 module.exports = router;

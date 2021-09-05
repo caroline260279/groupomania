@@ -18,7 +18,7 @@ const normalizePort = (val) => {
 };
 
 //création de la constante port
-const port = normalizePort(process.env.PORT || "8080");
+const port = normalizePort(process.env.PORT || "3000");
 
 //on dit a l'application sur quel port elle doit tourner
 app.set("port", port);

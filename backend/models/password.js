@@ -9,7 +9,7 @@ schema
     .min(8)
     // Maximum 20 caractères
     .is()
-    .max(100)
+    .max(20)
     // au moins une majuscule
     .has()
     .uppercase()
