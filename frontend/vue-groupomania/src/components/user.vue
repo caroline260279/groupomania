@@ -1,13 +1,10 @@
 <template>
     <div class="user_img">
-        <div id="img_user">{{ object.imageUrl }}</div>
+        <div id="img_user">{{ object.photo }}</div>
         <div class="user_username_bio">
             <p class="user_username">{{ object.username }}</p>
             <p class="user_bio">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Architecto ipsa voluptas impedit dicta eius dolore libero quo
-                quidem, quas vero asperiores tempore temporibus nostrum eligendi
-                veritatis laborum et delectus rem.
+                {{ object.bio }}
                 <a v-on:click="continu" class="user_click">la suite...</a>
             </p>
             <div
@@ -25,7 +22,7 @@
 </template>
 
 <script>
-/*import instance from "../instance.js";*/
+import instance from "../instance.js";
 export default {
     name: "user",
     data() {
@@ -48,22 +45,18 @@ export default {
             return this.display;
         },
     },
-    beforeMount() {
+    created() {
         this.user();
-        /*  this.tokenToHeader();*/
     },
     methods: {
-        /*  tokenToHeader() {
+        async user() {
+            const userConnected = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => resp.data.id);
+            console.log(userConnected);
             instance
-                .get("http://localhost:3000/auth/1")
-                .then((resp) => console.log(resp));
-        },*/
-        user() {
-            let usernameUrl = req.params.username;
-            //recuperer userid dans localhost puis mettre la variable dans l'url
-            fetch("http://localhost:3000/auth/" + usernameUrl)
-                .then((response) => response.json())
-                .then((data) => (this.object = data));
+                .get("http://localhost:3000/auth/" + userConnected)
+                .then((response) => (this.object = response.data));
         },
         continu: function() {
             this.display = "block";
@@ -78,7 +71,7 @@ export default {
 <style lang="scss">
 .user_img {
     width: 80%;
-    margin: 0 10% 50px 10%;
+    margin: 0 10% 20px 10%;
     display: flex;
     flex-direction: wrap;
     flex-wrap: nowrap;
@@ -122,6 +115,7 @@ export default {
         margin: 0 50px 0 0;
     }
     .user_username_bio {
+        min-width: 120px;
         .user_username {
             border-bottom: 2px solid black;
             margin: 0;
@@ -135,6 +129,63 @@ export default {
             font-size: 12px;
             text-align: center;
             overflow: hidden;
+        }
+    }
+}
+.button_user {
+    display: flex;
+    flex-direction: wrap;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin: 0 5% 20px 5%;
+    .button_modif_user {
+        width: 30%;
+        font-size: 10px;
+        border: 2px solid black;
+        background-color: white;
+    }
+    .button_delete_user {
+        width: 30%;
+        font-size: 10px;
+        border: 2px solid black;
+        background-color: white;
+    }
+    .button_modif_password {
+        width: 30%;
+        font-size: 10px;
+        border: 2px solid black;
+        background-color: white;
+    }
+}
+#user {
+    position: relative;
+    .modif_account {
+        border: 2px solid black;
+        width: 90%;
+        margin: 0 5% 20px 5%;
+        /* position: absolute;
+        top: 0;
+        right: 0;*/
+        .class_modif {
+            display: flex;
+            flex-direction: wrap;
+            justify-content: space-between;
+            margin: 15px 20px;
+            .label_modif {
+                position: relative;
+                min-width: 120px;
+                .p_modif {
+                    position: absolute;
+                    top: 10px;
+                    left: 0;
+                    font-size: 8px;
+                    color: red;
+                }
+            }
+            .input_modif {
+                width: 120px;
+                border: 2px solid black;
+            }
         }
     }
 }

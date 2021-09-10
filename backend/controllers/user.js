@@ -30,11 +30,11 @@ exports.signup = (req, res, next) => {
                 //et avec le hash comme mdp
                 password: hash,
             })
-                .then(() =>
+                .then(() => {
                     res.status(201).json({
                         message: "Utilisateur créé !",
-                    })
-                )
+                    });
+                })
                 .catch((error) =>
                     res.status(400).json({
                         error,

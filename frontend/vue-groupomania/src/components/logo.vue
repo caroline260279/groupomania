@@ -32,7 +32,6 @@ export default {
         margin: auto;
         width: 100%;
         .welcome_logo {
-            width: 100%;
             height: 40px;
             line-height: 40px;
             text-align: center;
@@ -43,49 +42,48 @@ export default {
         }
     }
 }
-@media screen and (min-width: 500px) {
-    .logo {
-        .p_logo {
-            .welcome_logo {
-                font-size: 15px;
-            }
-        }
-    }
-}
-@media screen and (min-width: 650px) {
+@media screen and (min-width: 481px) {
     .logo {
         img {
             height: 140px;
+            width: 80%;
+            margin: 0 10% 20px 10%;
         }
         .p_logo {
             .welcome_logo {
+                margin: 20px 10% 20px 10%;
                 font-size: 15px;
             }
         }
     }
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 769px) {
     .logo {
         img {
             height: 160px;
+            width: 80%;
+            margin: 0 10% 20px 10%;
         }
         .p_logo {
             .welcome_logo {
+                margin: 20px 10% 20px 10%;
                 font-size: 22px;
+                height: 30px;
             }
         }
     }
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1280px) {
     .logo {
         img {
+            height: 250px;
             width: 80%;
-            height: 160px;
-            margin: 0 5% 20px 5%;
+            margin: 10px 10% 20px 10%;
         }
         .p_logo {
             .welcome_logo {
-                font-size: 24px;
+                font-size: 26px;
+                height: 30px;
             }
         }
     }

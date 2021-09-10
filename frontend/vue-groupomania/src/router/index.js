@@ -3,6 +3,7 @@ import Accueil from "../views/Accueil.vue";
 import Signup from "../views/Signup.vue";
 import welcome from "../views/welcome.vue";
 import allgifs from "../views/allGifs.vue";
+import modifgif from "../views/modifgif.vue";
 
 const routes = [
     {
@@ -16,7 +17,7 @@ const routes = [
         component: Signup,
     },
     {
-        path: "/welcome/:username",
+        path: "/welcome",
         name: "user_page",
         component: welcome,
     },
@@ -24,6 +25,11 @@ const routes = [
         path: "/allgifs",
         name: "gifs_page",
         component: allgifs,
+    },
+    {
+        path: "/gif/:id",
+        name: "modif_gif",
+        component: modifgif,
     },
 ];
 

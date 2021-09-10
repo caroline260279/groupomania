@@ -21,12 +21,7 @@
                     </li>
                     <li class="navigation_connected_list">
                         <router-link to="/signup" class="menu"
-                            >S'inscrire</router-link
-                        >
-                    </li>
-                    <li class="navigation_connected_list ">
-                        <router-link to="/" class="menu"
-                            >Se connecter</router-link
+                            >Mon compte</router-link
                         >
                     </li>
 
@@ -35,15 +30,25 @@
                     </li>
 
                     <li class="navigation_connected_list">
-                        <a v-on:click="createPostAppear">Créer un post</a>
+                        <a v-on:click="appearGifWindow">Créer un post</a>
+                    </li>
+                    <li class="navigation_connected_list ">
+                        <router-link to="/" class="menu"
+                            >Se deconnecter</router-link
+                        >
                     </li>
                 </ul>
             </div>
         </div>
-        <form action="">
+        <form
+            id="form_welcome"
+            action=""
+            v-bind:style="{ display: createPostAppear }"
+        >
+            <h1>Qu'avez vous a dire?</h1>
             <div class="post_title">
-                <label class="label_title" for="title"
-                    >Email* :
+                <label class="label_title" for="post_title"
+                    >Titre* :
                     <p class="input_valid_title" v-if="!this.title">
                         *Champ obligatoire
                     </p>
@@ -53,22 +58,41 @@
             </div>
 
             <div class="post_gif">
-                <label class="label_gif" for="gif"
-                    >Titre* :
-                    <p class="input_valid_gif" v-if="!this.gif">
+                <label class="label_gif" for="post_gif"
+                    >Gif* :
+                    <p
+                        class="input_valid_gif"
+                        v-if="this.selectedFileGif.length === 0"
+                    >
                         *Champ obligatoire
                     </p></label
                 >
 
-                <input id="post_gif" type="file" />
+                <input
+                    id="post_gif"
+                    type="file"
+                    class="input_gif"
+                    @change="onFileSelectedGif"
+                />
             </div>
 
-            <button class="button_login" @click="submit()">Poster</button>
+            <div class="button_gif">
+                <button class="button_post_gif" @click="submitGif()">
+                    Poster
+                </button>
+                <button
+                    class="button_close_gifwindow"
+                    @click="closeGifWindow()"
+                >
+                    Finallement, je n'ai rien à dire...
+                </button>
+            </div>
         </form>
     </div>
 </template>
 
 <script>
+import instance from "../instance.js";
 export default {
     name: "welcome",
     data() {
@@ -76,11 +100,38 @@ export default {
             showNavigation: false,
             showModal: false,
             display: "none",
+            title: "",
+            selectedFileGif: [],
         };
     },
+    computed: {
+        createPostAppear: function() {
+            return this.display;
+        },
+    },
     methods: {
+        onFileSelectedGif(event) {
+            this.selectedFileGif = event.target.files[0];
+        },
         createPostAppear: function() {
             this.display = "block";
+        },
+        appearGifWindow: function() {
+            this.display = "block";
+        },
+        closeGifWindow: function() {
+            this.display = "none";
+        },
+        submitGif() {
+            const formData = new FormData();
+            formData.append("title", this.title);
+            formData.append("image", this.selectedFileGif);
+            instance
+                .post("http://localhost:3000/", formData)
+                .then(() => this.$router.push("/allgifs"))
+                .catch(() => {
+                    console.log("Oups, votre gif n'a pas pu être publié...");
+                });
         },
     },
 };
@@ -117,7 +168,7 @@ export default {
             .navigation_connected_list {
                 list-style-type: none;
                 text-decoration: none;
-                font-size: 12px;
+                font-size: 10px;
                 height: 50px;
                 color: black;
                 position: relative;
@@ -158,6 +209,71 @@ export default {
         background-color: white;
         border: 4px solid black;
         margin: 25px 10px;
+    }
+}
+#form_welcome {
+    border: 2px solid black;
+    display: flex;
+    flex-direction: wrap;
+    flex-wrap: wrap;
+    margin: 0 10px 20px 10px;
+    h1 {
+        display: block;
+        width: 100%;
+        padding-left: 10px;
+        font-size: 20px;
+    }
+    .post_title {
+        display: flex;
+        flex-direction: wrap;
+        flex-wrap: wrap;
+        width: 80%;
+        margin: 0 10% 20px 10%;
+        #post_title {
+            border: 2px solid black;
+            width: 150px;
+        }
+        .label_title {
+            flex-grow: 1;
+            position: relative;
+            .input_valid_title {
+                color: red;
+                font-size: 10px;
+                position: absolute;
+                top: 10px;
+                left: 0;
+            }
+        }
+    }
+    .post_gif {
+        display: flex;
+        flex-direction: wrap;
+        flex-wrap: wrap;
+        width: 80%;
+        margin: 0 10% 20px 10%;
+        #post_gif {
+            border: 2px solid black;
+            width: 150px;
+        }
+        .label_gif {
+            flex-grow: 1;
+            position: relative;
+            .input_valid_gif {
+                color: red;
+                font-size: 10px;
+                position: absolute;
+                top: 10px;
+                left: 0;
+            }
+        }
+    }
+    .button_gif {
+        display: flex;
+        flex-direction: wrap;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        width: 80%;
+        margin: 0 10% 20px 10%;
     }
 }
 </style>

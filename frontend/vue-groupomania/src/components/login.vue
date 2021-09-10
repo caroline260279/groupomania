@@ -22,8 +22,12 @@
 
                 <input id="password" type="password" v-model="password" />
             </div>
-            <div class="echec_login" v-if="loginInvalid">
-                <p>identifiants non valides</p>
+            <div
+                class="echec_login"
+                v-bind:style="{ display: computeddisplay }"
+            >
+                <p class="p_echec_login">identifiants non valides</p>
+                <p v-on:click="close" class="close_echec_login">fermer</p>
             </div>
             <button class="button_login" @click="submit()">Se connecter</button>
         </form>
@@ -45,7 +49,13 @@ export default {
             errors: [],
             email: "",
             password: "",
+            display: "none",
         };
+    },
+    computed: {
+        computeddisplay: function() {
+            return this.display;
+        },
     },
     created() {
         this.clearStorage();
@@ -68,14 +78,16 @@ export default {
                     if (data.userid > 0) {
                         console.log(data.token);
                         localStorage.setItem("token", data.token);
-                        this.$router.push("/welcome");
-                    } else {
-                        ("console.log(utilisateur non authentifié");
+                        this.$router.push("/allgifs");
                     }
                 })
                 .catch(() => {
-                    console.log("la création de l'utilisateur a échouée");
+                    return (this.display = "block");
                 });
+        },
+
+        close: function() {
+            this.display = "none";
         },
     },
 };
@@ -109,12 +121,26 @@ export default {
             margin-top: 40px;
             margin-bottom: 40px;
         }
-        .echec_login {
-            color: red;
-            text-align: center;
-            border: 2px solid black;
-            margin: 0 10% 20px 10%;
-        }
+    }
+}
+.echec_login {
+    color: red;
+    height: 50px;
+    text-align: center;
+    border: 2px solid black;
+    margin: 0 10% 20px 10%;
+    position: relative;
+    .p_echec_login {
+        height: 50px;
+        line-height: 50px;
+        margin: auto;
+    }
+    .close_echec_login {
+        color: black;
+        font-size: 10px;
+        position: absolute;
+        top: 25px;
+        right: 5px;
     }
 }
 .login_email {
@@ -188,23 +214,11 @@ export default {
     }
 }
 
-@media screen and (min-width: 401px) {
-    .login_email {
-        #email {
-            width: 170px;
-        }
-    }
-    .login_mdp {
-        #password {
-            width: 170px;
-        }
-    }
-}
-@media screen and (min-width: 480px) {
+@media screen and (min-width: 481px) {
     .classLogin {
         width: 80%;
         margin: 0 10%;
-        font-size: 15px;
+        font-size: 20px;
         .login_email {
             padding-bottom: 50px;
             #email {
@@ -214,8 +228,8 @@ export default {
             .label_login {
                 font-size: 15px;
                 .input_valid_login {
-                    width: 200px;
-                    font-size: 12px;
+                    width: 170px;
+                    font-size: 13px;
                     position: absolute;
                     top: 10px;
                     left: 0;
@@ -231,7 +245,7 @@ export default {
                 font-size: 15px;
                 .input_valid_login {
                     width: 170px;
-                    font-size: 12px;
+                    font-size: 13px;
                     position: absolute;
                     top: 10px;
                     left: 0;
@@ -240,22 +254,23 @@ export default {
         }
     }
 }
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 769px) {
     .classLogin {
-        width: 80%;
-        margin: 0 10%;
-        font-size: 20px;
+        width: 70%;
+        margin: 0 15%;
+        font-size: 23px;
         .login_email {
             padding-bottom: 50px;
+            margin-top: 50px;
             #email {
-                width: 230px;
-                font-size: 16px;
+                width: 240px;
+                font-size: 23px;
             }
             .label_login {
-                font-size: 16px;
+                font-size: 23px;
                 .input_valid_login {
-                    width: 230px;
-                    font-size: 13px;
+                    width: 240px;
+                    font-size: 16px;
                     position: absolute;
                     top: 10px;
                     left: 0;
@@ -263,20 +278,55 @@ export default {
             }
         }
         .login_mdp {
+            margin-bottom: 50px;
             #password {
-                width: 230px;
-                font-size: 16px;
+                width: 240px;
+                font-size: 23px;
             }
             .label_login {
-                font-size: 16px;
+                font-size: 23px;
                 .input_valid_login {
-                    width: 230px;
-                    font-size: 13px;
+                    width: 240px;
+                    font-size: 16px;
                     position: absolute;
                     top: 10px;
                     left: 0;
                 }
             }
+        }
+    }
+    .button_login {
+        width: 40%;
+        margin-left: 30%;
+        font-size: 20px;
+    }
+    .echec_login {
+        height: 60px;
+        margin: 0 10% 40px 10%;
+        .p_echec_login {
+            height: 50px;
+            line-height: 50px;
+            margin: auto;
+        }
+        .close_echec_login {
+            font-size: 12px;
+            top: 35px;
+        }
+    }
+}
+@media screen and (min-width: 1280px) {
+    .echec_login {
+        width: 50%;
+        height: 60px;
+        margin: 0 25% 40px 25%;
+        .p_echec_login {
+            height: 50px;
+            line-height: 50px;
+            margin: auto;
+        }
+        .close_echec_login {
+            font-size: 12px;
+            top: 35px;
         }
     }
 }

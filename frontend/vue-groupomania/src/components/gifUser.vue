@@ -2,7 +2,7 @@
     <div>
         <ul id="gifuser" class="demo">
             <li v-for="value in object" v-bind:key="value" class="list_gifuser">
-                <div class="title_gifuser">{{ value.title }}</div>
+                <div class="title_gifuser">{{ value.title }}{{ value.id }}</div>
                 <div>
                     <img src="@/assets/moi.jpg" alt="" class="img_gifuser" />
                 </div>
@@ -18,13 +18,23 @@
                         type="text"
                         v-model="comment"
                     />
+                    <button
+                        class="button_comment_gifuser"
+                        type="button"
+                        @click="createcomment()"
+                    >
+                        Commenter
+                    </button>
                 </div>
+                <button class="button_modifGif" type="button">
+                    Modifier mon gif
+                </button>
                 <button
-                    class="button_comment_gifuser"
+                    class="button_modifGif"
                     type="button"
-                    @click="createcomment()"
+                    v-on:click="deleteGif()"
                 >
-                    Commenter
+                    Supprimer ce gif
                 </button>
             </li>
         </ul>
@@ -32,6 +42,7 @@
 </template>
 
 <script>
+import instance from "../instance.js";
 export default {
     name: "gifuser",
     data() {
@@ -46,13 +57,19 @@ export default {
     created() {
         this.user();
     },
+
     methods: {
-        user() {
-            let username = localStorage.getItem("usernameToUserPage");
-            //recuperer userid dans localhost puis mettre la variable dans l'url
-            fetch("http://localhost:3000/gif/" + username)
-                .then((response) => response.json())
-                .then((data) => (this.object = data));
+        async user() {
+            const usernameConnected = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => resp.data.username);
+            console.log(usernameConnected);
+            instance
+                .get("http://localhost:3000/gif/" + usernameConnected)
+                .then((response) => (this.object = response.data));
+        },
+        update() {
+            this.$router.push("/gif/30");
         },
     },
 };
@@ -79,6 +96,9 @@ export default {
             margin: 0 5%;
             height: 200px;
             object-fit: cover;
+        }
+        .form_modif {
+            border: 2px solid black;
         }
     }
 }
