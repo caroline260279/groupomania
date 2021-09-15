@@ -4,6 +4,9 @@ import Signup from "../views/Signup.vue";
 import welcome from "../views/welcome.vue";
 import allgifs from "../views/allGifs.vue";
 import modifgif from "../views/modifgif.vue";
+import modifuser from "../views/modifuser.vue";
+import userdelete from "../views/userdelete.vue";
+import modifPassword from "../views/modifpassword.vue";
 
 const routes = [
     {
@@ -30,6 +33,21 @@ const routes = [
         path: "/gif/:id",
         name: "modif_gif",
         component: modifgif,
+    },
+    {
+        path: "/user/:id",
+        name: "modif_user",
+        component: modifuser,
+    },
+    {
+        path: "/userdelete",
+        name: "delete_user",
+        component: userdelete,
+    },
+    {
+        path: "/password",
+        name: "modif_passwod",
+        component: modifPassword,
     },
 ];
 

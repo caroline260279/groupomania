@@ -1,22 +1,37 @@
 <template>
-    <div class="user_img">
-        <div id="img_user">{{ object.photo }}</div>
-        <div class="user_username_bio">
-            <p class="user_username">{{ object.username }}</p>
-            <p class="user_bio">
-                {{ object.bio }}
-                <a v-on:click="continu" class="user_click">la suite...</a>
-            </p>
-            <div
-                class="user_bio_two"
-                v-bind:style="{ display: computeddisplay }"
-            >
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Architecto ipsa voluptas impedit dicta eius dolore libero quo
-                quidem, quas vero asperiores tempore temporibus nostrum eligendi
-                veritatis laborum et delectus rem.
-                <p v-on:click="close" class="close_user_bio_two">fermer</p>
+    <div>
+        <div class="user_img">
+            <img v-bind:src="object.photo" alt="" id="img_user" />
+
+            <div class="user_username_bio">
+                <p class="user_username">{{ object.username }}</p>
+                <p class="user_bio">
+                    {{ object.bio }}
+                    <a v-on:click="continu" class="user_click">la suite...</a>
+                </p>
+                <div
+                    class="user_bio_two"
+                    v-bind:style="{ display: computeddisplay }"
+                >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Architecto ipsa voluptas impedit dicta eius dolore libero
+                    quo quidem, quas vero asperiores tempore temporibus nostrum
+                    eligendi veritatis laborum et delectus rem.
+                    <p v-on:click="close" class="close_user_bio_two">fermer</p>
+                </div>
             </div>
+        </div>
+
+        <div class="button_user">
+            <button class="button_modif_user" @click="modifUser(object.id)">
+                Modifier mon compte
+            </button>
+            <button class="button_delete_user" @click="deleteUser()">
+                Supprimer mon compte
+            </button>
+            <button class="button_modif_password" @click="modifPassword()">
+                Changer mon mot de passe
+            </button>
         </div>
     </div>
 </template>
@@ -28,6 +43,7 @@ export default {
     data() {
         return {
             object: {
+                id: "",
                 firstname: "",
                 name: "",
                 username: "",
@@ -37,6 +53,7 @@ export default {
                 password: "",
                 photo: "",
             },
+            imageprofil: "",
             display: "none",
         };
     },
@@ -64,6 +81,15 @@ export default {
         close: function() {
             this.display = "none";
         },
+        modifUser(x) {
+            this.$router.push("/user/" + x);
+        },
+        deleteUser() {
+            this.$router.push("/userdelete");
+        },
+        modifPassword() {
+            this.$router.push("/password");
+        },
     },
 };
 </script>
@@ -79,7 +105,7 @@ export default {
     position: relative;
     .user_bio_two {
         width: 80%;
-        margin: 30px 10% 0 10%;
+        margin: 0 10%;
         background-color: white;
         text-align: center;
         overflow: hidden;
@@ -87,12 +113,12 @@ export default {
         top: 0;
         left: 0;
         border: 2px solid black;
+        border-radius: 10px;
         display: none;
         .close_user_bio_two {
             font-size: 13px;
             width: 10%;
             text-align: center;
-            border-radius: 50%;
             margin: 0 5% 0 85%;
             font-weight: bolder;
         }
@@ -105,9 +131,9 @@ export default {
     }
 
     #img_user {
-        min-width: 120px;
+        width: 120px;
         height: 120px;
-        margin: auto;
+        margin: 0 20px;
         overflow: hidden;
         object-fit: cover;
         border: 2px solid black;
@@ -115,7 +141,7 @@ export default {
         margin: 0 50px 0 0;
     }
     .user_username_bio {
-        min-width: 120px;
+        flex: 1;
         .user_username {
             border-bottom: 2px solid black;
             margin: 0;
@@ -141,51 +167,175 @@ export default {
     .button_modif_user {
         width: 30%;
         font-size: 10px;
-        border: 2px solid black;
         background-color: white;
+        border: 2px solid black;
+        box-shadow: 3px 3px black;
     }
     .button_delete_user {
         width: 30%;
         font-size: 10px;
-        border: 2px solid black;
         background-color: white;
+        border: 2px solid black;
+        box-shadow: 3px 3px black;
     }
     .button_modif_password {
         width: 30%;
         font-size: 10px;
-        border: 2px solid black;
         background-color: white;
+        border: 2px solid black;
+        box-shadow: 3px 3px black;
     }
 }
-#user {
-    position: relative;
-    .modif_account {
-        border: 2px solid black;
-        width: 90%;
+@media screen and (min-width: 481px) {
+    .user_img {
+        width: 80%;
+        margin: 0 10% 20px 10%;
+        .user_bio_two {
+            width: 80%;
+            margin: 0 10%;
+            font-size: 20px;
+            .close_user_bio_two {
+                font-size: 13px;
+                width: 10%;
+
+                margin: 5px 5% 5px 85%;
+            }
+        }
+        .user_click {
+            font-size: 13px;
+        }
+
+        #img_user {
+            width: 160px;
+            height: 160px;
+            margin: 0 20px;
+            margin: 0 50px 0 0;
+        }
+        .user_username_bio {
+            .user_username {
+                margin: 0;
+                font-size: 35px;
+                height: 70px;
+                line-height: 70px;
+            }
+            .user_bio {
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+    }
+    .button_user {
         margin: 0 5% 20px 5%;
-        /* position: absolute;
-        top: 0;
-        right: 0;*/
-        .class_modif {
-            display: flex;
-            flex-direction: wrap;
-            justify-content: space-between;
-            margin: 15px 20px;
-            .label_modif {
-                position: relative;
-                min-width: 120px;
-                .p_modif {
-                    position: absolute;
-                    top: 10px;
-                    left: 0;
-                    font-size: 8px;
-                    color: red;
-                }
+        .button_modif_user {
+            font-size: 13px;
+        }
+        .button_delete_user {
+            font-size: 13px;
+        }
+        .button_modif_password {
+            font-size: 13px;
+        }
+    }
+}
+@media screen and (min-width: 769px) {
+    .user_img {
+        width: 70%;
+        margin: 0 15% 20px 15%;
+        .user_bio_two {
+            width: 70%;
+            margin: 0 15%;
+            font-size: 25px;
+            .close_user_bio_two {
+                font-size: 16px;
+                width: 10%;
+
+                margin: 0 5% 0 85%;
             }
-            .input_modif {
-                width: 120px;
-                border: 2px solid black;
+        }
+        .user_click {
+            font-size: 16px;
+        }
+
+        #img_user {
+            width: 220px;
+            height: 220px;
+            margin: 0 20px;
+            margin: 0 50px 0 0;
+        }
+        .user_username_bio {
+            .user_username {
+                margin: 0;
+                font-size: 42px;
+                height: 50px;
+                line-height: 50px;
             }
+            .user_bio {
+                height: 50px;
+                font-size: 25px;
+            }
+        }
+    }
+    .button_user {
+        margin: 0 10% 20px 10%;
+        .button_modif_user {
+            font-size: 16px;
+        }
+        .button_delete_user {
+            font-size: 16px;
+        }
+        .button_modif_password {
+            font-size: 16px;
+        }
+    }
+}
+@media screen and (min-width: 1280px) {
+    .user_img {
+        width: 60%;
+        margin: 0 20% 20px 20%;
+        .user_bio_two {
+            width: 60%;
+            margin: 0 20%;
+            font-size: 25px;
+            .close_user_bio_two {
+                font-size: 16px;
+                width: 10%;
+
+                margin: 0 5% 0 85%;
+            }
+        }
+        .user_click {
+            font-size: 16px;
+        }
+
+        #img_user {
+            width: 220px;
+            height: 220px;
+            margin: 0 20px;
+            margin: 0 50px 0 0;
+        }
+        .user_username_bio {
+            .user_username {
+                margin: 0;
+                font-size: 42px;
+                height: 50px;
+                line-height: 50px;
+            }
+            .user_bio {
+                height: 50px;
+                font-size: 25px;
+            }
+        }
+    }
+    .button_user {
+        margin: 0 20% 20px 20%;
+        .button_modif_user {
+            font-size: 16px;
+        }
+        .button_delete_user {
+            font-size: 16px;
+        }
+        .button_modif_password {
+            font-size: 16px;
         }
     }
 }

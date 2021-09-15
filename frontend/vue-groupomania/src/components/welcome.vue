@@ -11,6 +11,7 @@
                 @click="showNavigation = !showNavigation"
             >
                 <i class="fas fa-bars fa-2x"></i>
+                <i class="fas fa-bars fa-3x"></i>
             </button>
             <div v-show="showNavigation" class="modal">
                 <ul class="navigation_connected_menu">
@@ -20,7 +21,7 @@
                         >
                     </li>
                     <li class="navigation_connected_list">
-                        <router-link to="/signup" class="menu"
+                        <router-link to="/welcome" class="menu"
                             >Mon compte</router-link
                         >
                     </li>
@@ -43,7 +44,7 @@
         <form
             id="form_welcome"
             action=""
-            v-bind:style="{ display: createPostAppear }"
+            v-bind:style="{ display: postAppear }"
         >
             <h1>Qu'avez vous a dire?</h1>
             <div class="post_title">
@@ -105,7 +106,7 @@ export default {
         };
     },
     computed: {
-        createPostAppear: function() {
+        postAppear() {
             return this.display;
         },
     },
@@ -113,9 +114,7 @@ export default {
         onFileSelectedGif(event) {
             this.selectedFileGif = event.target.files[0];
         },
-        createPostAppear: function() {
-            this.display = "block";
-        },
+
         appearGifWindow: function() {
             this.display = "block";
         },
@@ -128,7 +127,7 @@ export default {
             formData.append("image", this.selectedFileGif);
             instance
                 .post("http://localhost:3000/", formData)
-                .then(() => this.$router.push("/allgifs"))
+                .then(() => location.reload())
                 .catch(() => {
                     console.log("Oups, votre gif n'a pas pu être publié...");
                 });
@@ -144,7 +143,7 @@ export default {
     flex-direction: row;
     flex-wrap: wrap;
     line-height: 100px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 
     .navigation_connected_image {
         flex-grow: 1;
@@ -209,10 +208,14 @@ export default {
         background-color: white;
         border: 4px solid black;
         margin: 25px 10px;
+        .fa-3x {
+            display: none;
+        }
     }
 }
 #form_welcome {
     border: 2px solid black;
+    border-radius: 10px;
     display: flex;
     flex-direction: wrap;
     flex-wrap: wrap;
@@ -272,8 +275,141 @@ export default {
         flex-direction: wrap;
         flex-wrap: nowrap;
         justify-content: space-between;
+        width: 70%;
+        margin: 0 15% 20px 15%;
+        .button_post_gif {
+            background-color: white;
+            border: 2px solid black;
+            box-shadow: 3px 3px black;
+            margin-right: 5%;
+        }
+        .button_close_gifwindow {
+            background-color: white;
+            border: 2px solid black;
+            box-shadow: 3px 3px black;
+        }
+    }
+}
+@media screen and (min-width: 481px) {
+    #navigation_connected {
+        line-height: 150px;
+        .navigation_connected_image {
+            height: 150px;
+        }
+        .navigation_connected_button {
+            height: 60px;
+            margin: 45px 20px;
+        }
+        .modal {
+            .navigation_connected_menu {
+                .navigation_connected_list {
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+    #form_welcome {
         width: 80%;
         margin: 0 10% 20px 10%;
+        font-size: 15px;
+        h1 {
+            width: 80%;
+            margin: 20px 10%;
+            font-size: 23px;
+        }
+    }
+}
+@media screen and (min-width: 769px) {
+    #navigation_connected {
+        line-height: 200px;
+        .navigation_connected_image {
+            height: 200px;
+        }
+        .navigation_connected_button {
+            height: 80px;
+            margin: 60px 40px;
+            .fa-2x {
+                display: none;
+            }
+            .fa-3x {
+                display: block;
+            }
+        }
+        .modal {
+            .navigation_connected_menu {
+                .navigation_connected_list {
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+    #form_welcome {
+        width: 70%;
+        margin: 40px 15% 40px 15%;
+        font-size: 20px;
+        h1 {
+            width: 80%;
+            margin: 20px 10%;
+            font-size: 23px;
+        }
+        .post_title {
+            margin: 0 10% 30px 10%;
+        }
+        .post_gif {
+            margin: 0 10% 30px 10%;
+        }
+    }
+    .button_gif {
+        margin: 30px 15%;
+
+        .button_post_gif {
+            font-size: 15px;
+        }
+        .button_close_gifwindow {
+            font-size: 15px;
+        }
+    }
+}
+@media screen and (min-width: 1280px) {
+    #navigation_connected {
+        width: 70%;
+        margin: 0 15% 40px 15%;
+    }
+    #form_welcome {
+        width: 40%;
+        margin: 40px 30% 40px 30%;
+        font-size: 25px;
+        h1 {
+            width: 80%;
+            margin: 20px 10%;
+            font-size: 35px;
+        }
+        .post_title {
+            margin: 0 10% 25px 10%;
+            .label_title {
+                .input_valid_title {
+                    top: 15px;
+                }
+            }
+        }
+        .post_gif {
+            margin: 0 10% 25px 10%;
+            .label_gif {
+                .input_valid_gif {
+                    top: 15px;
+                }
+            }
+        }
+    }
+    .button_gif {
+        margin: 30px 15%;
+
+        .button_post_gif {
+            font-size: 15px;
+        }
+        .button_close_gifwindow {
+            font-size: 15px;
+        }
     }
 }
 </style>

@@ -4,7 +4,11 @@
             <li v-for="value in object" v-bind:key="value" class="list_gifuser">
                 <div class="title_gifuser">{{ value.title }}{{ value.id }}</div>
                 <div>
-                    <img src="@/assets/moi.jpg" alt="" class="img_gifuser" />
+                    <img
+                        v-bind:src="value.imageUrl"
+                        alt=""
+                        class="img_gifuser"
+                    />
                 </div>
                 <div class="data_gifuser">
                     <p>ajouté le:</p>
@@ -26,13 +30,17 @@
                         Commenter
                     </button>
                 </div>
-                <button class="button_modifGif" type="button">
+                <button
+                    class="button_modifGif"
+                    type="button"
+                    v-on:click="update(value.id)"
+                >
                     Modifier mon gif
                 </button>
                 <button
                     class="button_modifGif"
                     type="button"
-                    v-on:click="deleteGif()"
+                    v-on:click="deleteGif(value.id)"
                 >
                     Supprimer ce gif
                 </button>
@@ -48,6 +56,7 @@ export default {
     data() {
         return {
             object: {
+                id: "",
                 title: "",
                 imageUrl: "",
                 createdAt: "",
@@ -57,19 +66,26 @@ export default {
     created() {
         this.user();
     },
-
     methods: {
-        async user() {
-            const usernameConnected = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.username);
-            console.log(usernameConnected);
+        user() {
             instance
-                .get("http://localhost:3000/gif/" + usernameConnected)
-                .then((response) => (this.object = response.data));
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) =>
+                    instance
+                        .get("http://localhost:3000/gif/" + resp.data.username)
+                        .then((response) => (this.object = response.data))
+                );
         },
-        update() {
-            this.$router.push("/gif/30");
+        update(x) {
+            this.$router.push("/gif/" + x);
+        },
+        deleteGif(y) {
+            instance
+                .delete("http://localhost:3000/delete/" + y)
+                .then(() => location.reload())
+                .catch(() => {
+                    console.log("echec");
+                });
         },
     },
 };

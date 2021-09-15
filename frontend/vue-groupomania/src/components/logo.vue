@@ -29,7 +29,6 @@ export default {
     .p_logo {
         position: absolute;
         bottom: 0;
-        margin: auto;
         width: 100%;
         .welcome_logo {
             height: 40px;
@@ -50,6 +49,7 @@ export default {
             margin: 0 10% 20px 10%;
         }
         .p_logo {
+            bottom: -10px;
             .welcome_logo {
                 margin: 20px 10% 20px 10%;
                 font-size: 15px;
@@ -65,6 +65,7 @@ export default {
             margin: 0 10% 20px 10%;
         }
         .p_logo {
+            bottom: -25px;
             .welcome_logo {
                 margin: 20px 10% 20px 10%;
                 font-size: 22px;

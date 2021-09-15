@@ -1,17 +1,6 @@
 <template>
     <div id="user">
-        <div class="button_user">
-            <button class="button_modif_user" @click="modifUser()">
-                Modifier mon compte
-            </button>
-            <button class="button_delete_user" @click="deleteUser()">
-                Supprimer mon compte
-            </button>
-            <button class="button_modif_password" @click="modifPassword()">
-                Changer mon mot de passe
-            </button>
-        </div>
-        <div class="modif_account">
+        <form class="modif_account">
             <div class="class_modif">
                 <label class="label_modif" for="modif_username"
                     >Pseudo* :
@@ -69,7 +58,10 @@
                     v-model="email"
                 />
             </div>
-        </div>
+            <button class="button_valid_modif" @click="validModifUser()">
+                Valider les modifications
+            </button>
+        </form>
     </div>
 </template>
 
@@ -104,40 +96,13 @@ export default {
 </script>
 
 <style lang="scss">
-.button_user {
-    display: flex;
-    flex-direction: wrap;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    margin: 0 5% 20px 5%;
-    .button_modif_user {
-        width: 30%;
-        font-size: 10px;
-        border: 2px solid black;
-        background-color: white;
-    }
-    .button_delete_user {
-        width: 30%;
-        font-size: 10px;
-        border: 2px solid black;
-        background-color: white;
-    }
-    .button_modif_password {
-        width: 30%;
-        font-size: 10px;
-        border: 2px solid black;
-        background-color: white;
-    }
-}
 #user {
     position: relative;
     .modif_account {
         border: 2px solid black;
         width: 90%;
         margin: 0 5% 20px 5%;
-        /* position: absolute;
-        top: 0;
-        right: 0;*/
+        border-radius: 10px;
         .class_modif {
             display: flex;
             flex-direction: wrap;
@@ -158,6 +123,13 @@ export default {
                 width: 120px;
                 border: 2px solid black;
             }
+        }
+        .button_valid_modif {
+            width: 50%;
+            margin: 20px 25%;
+            background-color: white;
+            border: 2px solid black;
+            box-shadow: 3px 3px black;
         }
     }
 }

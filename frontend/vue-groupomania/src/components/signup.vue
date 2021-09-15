@@ -138,7 +138,6 @@ export default {
         },
         async createUser() {
             const formData = new FormData();
-            console.log(formData);
             formData.append("firstname", this.firstname);
             formData.append("name", this.name);
             formData.append("username", this.username);

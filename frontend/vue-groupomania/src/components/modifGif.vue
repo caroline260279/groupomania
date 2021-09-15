@@ -1,7 +1,13 @@
 <template>
     <div>
+        <div>
+            <div class="">{{ object.title }}{{ object.id }}</div>
+            <div>
+                <img v-bind:src="object.imageUrl" alt="" class="" />
+            </div>
+        </div>
         <form action="">
-            <h1>un changement?</h1>
+            <h1>Que souhitez-vous changer?</h1>
             <div>
                 <label class="label_title_modif" for="post_title_modif"
                     >Titre :
@@ -32,6 +38,11 @@
                 </button>
             </div>
         </form>
+        <a href="">
+            <router-link to="/welcome" class="menu"
+                >tout me convient, retour à mon compte...
+            </router-link></a
+        >
     </div>
 </template>
 <script>
@@ -40,38 +51,63 @@ export default {
     name: "gifToModif",
     data() {
         return {
+            object: {
+                id: "",
+                title: "",
+                imageUrl: "",
+                createdAt: "",
+            },
             title: "",
             selectedFile: [],
         };
     },
-
+    created() {
+        this.gifModif();
+    },
     methods: {
         onFileSelected(event) {
             this.selectedFile = event.target.files[0];
         },
+        gifModif() {
+            let gifIdToModif = this.$route.params.id;
+            instance
+                .get("http://localhost:3000/" + gifIdToModif)
+                .then((response) => (this.object = response.data))
+                .catch(() => {
+                    console.log("echec");
+                });
+        },
 
         updateGif() {
+            let gifIdToModif = this.$route.params.id;
             const formData = new FormData();
             console.log(this.title === "");
             if (!(this.title === "")) {
                 formData.append("title", this.title);
                 formData.append("image", this.selectedFile);
                 instance
-                    .put("http://localhost:3000/modify/30", formData)
-                    .then((response) => console.log(response))
+                    .put(
+                        "http://localhost:3000/modify/" + gifIdToModif,
+                        formData
+                    )
+                    .then(() => location.reload())
                     .catch(() => {
                         console.log("echec");
                     });
             } else {
                 formData.append("image", this.selectedFile);
                 instance
-                    .put("http://localhost:3000/modify/30", formData)
-                    .then((response) => console.log(response))
+                    .put(
+                        "http://localhost:3000/modify/" + gifIdToModif,
+                        formData
+                    )
+                    .then(() => location.reload())
                     .catch(() => {
                         console.log("echec");
                     });
             }
         },
+
         closefModif() {
             this.$router.push("/welcome");
         },

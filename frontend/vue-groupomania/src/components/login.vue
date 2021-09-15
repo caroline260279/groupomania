@@ -46,7 +46,6 @@ export default {
     name: "login",
     data() {
         return {
-            errors: [],
             email: "",
             password: "",
             display: "none",
@@ -74,9 +73,7 @@ export default {
                 .post("http://localhost:3000/auth/login", user)
                 .then((response) => response.data)
                 .then((data) => {
-                    console.log(data.userid);
                     if (data.userid > 0) {
-                        console.log(data.token);
                         localStorage.setItem("token", data.token);
                         this.$router.push("/allgifs");
                     }
@@ -270,7 +267,7 @@ export default {
                 font-size: 23px;
                 .input_valid_login {
                     width: 240px;
-                    font-size: 16px;
+                    font-size: 13px;
                     position: absolute;
                     top: 10px;
                     left: 0;
@@ -287,7 +284,7 @@ export default {
                 font-size: 23px;
                 .input_valid_login {
                     width: 240px;
-                    font-size: 16px;
+                    font-size: 13px;
                     position: absolute;
                     top: 10px;
                     left: 0;
