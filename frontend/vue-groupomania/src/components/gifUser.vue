@@ -1,8 +1,8 @@
 <template>
     <div>
-        <ul id="gifuser" class="demo">
+        <ul id="gifuser">
             <li v-for="value in object" v-bind:key="value" class="list_gifuser">
-                <div class="title_gifuser">{{ value.title }}{{ value.id }}</div>
+                <div class="title_gifuser">{{ value.title }}</div>
                 <div>
                     <img
                         v-bind:src="value.imageUrl"
@@ -10,18 +10,25 @@
                         class="img_gifuser"
                     />
                 </div>
-                <div class="data_gifuser">
-                    <p>ajouté le:</p>
-                    {{ value.createdAt }}
+                <div class="row1_gifuser">
+                    <div class="like_gifuser">
+                        <button class="button_heart_gifuser">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <p class="number_like_gifuser">17</p>
+                    </div>
+                    <p class="date_gifuser">
+                        dernière mise à jour le
+                        {{
+                            new Date(value.updatedAt).toLocaleDateString(
+                                "fr-FR"
+                            )
+                        }}
+                    </p>
                 </div>
-                <div class="comment_gifuser">
-                    <label class="label_giifuser" for="comment"></label>
-                    <input
-                        class="input_comment_gifuser"
-                        id="comment"
-                        type="text"
-                        v-model="comment"
-                    />
+                <form class="comment_gifuser">
+                    <label class="label_gifuser" for="comment_gifuser"></label>
+                    <input id="comment_gifuser" type="text" v-model="comment" />
                     <button
                         class="button_comment_gifuser"
                         type="button"
@@ -29,21 +36,26 @@
                     >
                         Commenter
                     </button>
+                </form>
+                <button class="button_show_comment_gifuser">
+                    voire les commentaires
+                </button>
+                <div class="button_gifuser_modif">
+                    <button
+                        class="button_modifGif"
+                        type="button"
+                        v-on:click="update(value.id)"
+                    >
+                        Modifier mon gif
+                    </button>
+                    <button
+                        class="button_deleteGif"
+                        type="button"
+                        v-on:click="deleteGif(value.id)"
+                    >
+                        Supprimer ce gif
+                    </button>
                 </div>
-                <button
-                    class="button_modifGif"
-                    type="button"
-                    v-on:click="update(value.id)"
-                >
-                    Modifier mon gif
-                </button>
-                <button
-                    class="button_modifGif"
-                    type="button"
-                    v-on:click="deleteGif(value.id)"
-                >
-                    Supprimer ce gif
-                </button>
             </li>
         </ul>
     </div>
@@ -59,10 +71,11 @@ export default {
                 id: "",
                 title: "",
                 imageUrl: "",
-                createdAt: "",
+                updatedAt: "",
             },
         };
     },
+
     created() {
         this.user();
     },
@@ -101,6 +114,7 @@ export default {
     }
     .list_gifuser {
         border: 2px solid black;
+        border-radius: 10px;
         margin: 0 5% 30px 5%;
         .title_gifuser {
             font-size: 25px;
@@ -113,9 +127,88 @@ export default {
             height: 200px;
             object-fit: cover;
         }
-        .form_modif {
-            border: 2px solid black;
+        .row1_gifuser {
+            width: 90%;
+            margin: 0 5% 10px 5%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            font-size: 12px;
+            .like_gifuser {
+                margin: 0;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                .button_heart_gifuser {
+                    background-color: white;
+                    border: none;
+                }
+                .number_like_gifuser {
+                    margin: 0;
+                }
+            }
+            .date_gifuser {
+                flex-grow: 1;
+                margin: 0;
+                text-align: right;
+            }
+        }
+        .comment_gifuser {
+            width: 90%;
+            margin: 0 5% 10px 5%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            #comment_gifuser {
+                width: 60%;
+                margin-right: 5%;
+                border: 2px solid black;
+            }
+            .button_comment_gifuser {
+                flex-grow: 1;
+                width: 30%;
+                font-size: 12px;
+                padding: 0;
+                background-color: white;
+                border: 2px solid black;
+                box-shadow: 3px 3px black;
+            }
+        }
+        .button_show_comment_gifuser {
+            border: none;
+            background-color: white;
+            width: 90%;
+            margin: 0 5% 5px 5%;
+            text-align: left;
+        }
+        .button_gifuser_modif {
+            width: 80%;
+            display: flex;
+            flex-direction: wrap;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            margin: 10px 10%;
+            .button_modifGif {
+                width: 40%;
+                background-color: white;
+                border: 2px solid black;
+                box-shadow: 3px 3px black;
+            }
+            .button_deleteGif {
+                width: 40%;
+                background-color: white;
+                border: 2px solid black;
+                box-shadow: 3px 3px black;
+            }
         }
     }
+}
+@media screen and (min-width: 481px) {
+}
+@media screen and (min-width: 769px) {
+}
+@media screen and (min-width: 1280px) {
 }
 </style>

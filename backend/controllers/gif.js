@@ -106,7 +106,10 @@ exports.getAllGifUser = async (req, res, next) => {
         where: { username: req.params.username },
     });
     userId = userTofind.id;
-    model.Gif.findAll({ where: { userid: userId } })
+    model.Gif.findAll({
+        where: { userid: userId },
+        order: [["updatedAt", "DESC"]],
+    })
         .then((gifs) => {
             res.status(200).send(gifs);
         })
@@ -119,7 +122,7 @@ exports.getAllGifUser = async (req, res, next) => {
 
 //récupération de tous les gifs
 exports.getAllGif = (req, res, next) => {
-    model.Gif.findAll({ order: [["createdAt", "DESC"]] })
+    model.Gif.findAll({ order: [["updatedAt", "DESC"]] })
         .then((gifs) => {
             res.status(200).send(gifs);
         })

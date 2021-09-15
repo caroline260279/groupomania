@@ -17,7 +17,14 @@
                         </button>
                         <p class="number_like">17</p>
                     </div>
-                    <p class="date_allgif">publié le 26/02/1979</p>
+                    <p class="date_allgif">
+                        dernière mise à jour le
+                        {{
+                            new Date(value.updatedAt).toLocaleDateString(
+                                "fr-FR"
+                            )
+                        }}
+                    </p>
                 </div>
 
                 <form class="row2_allgif" action="">
@@ -36,7 +43,7 @@
                         Commenter
                     </button>
                 </form>
-                <button class="button_show_comment">
+                <button class="button_show_comment" @click="showcomment()">
                     voire les commentaires
                 </button>
             </li>

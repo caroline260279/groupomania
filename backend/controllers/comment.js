@@ -64,3 +64,23 @@ exports.getOneComment = (req, res, next) => {
         .then((Gif_comment) => res.status(200).send(Gif_comment))
         .catch((error) => res.status(400).json({ error }));
 };
+
+//accéder à tous les commentaires
+exports.getAllComment = async (req, res, next) => {
+    const gifTofind = await model.Gif.findOne({
+        where: { id: req.params.id },
+    });
+    console.log(gifTofind);
+    gifId = gifTofind.id;
+    model.Gif_comment.findAll({
+        where: { gifid: gifId },
+        order: [["updatedAt", "DESC"]],
+    }).then((Gif_comment) => {
+        res.status(200).send(Gif_comment);
+    });
+    /* .catch((error) => {
+            res.status(400).json({
+                error: error,
+            });
+        });*/
+};

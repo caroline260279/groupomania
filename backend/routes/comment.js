@@ -16,8 +16,10 @@ const auth = require("../middelware/auth");
 router.post("/comment/:id", auth, commentCtrl.createComment);
 //route pour créer un commentaire, nécessite l'authentification
 router.put("/comment/modify/:id", auth, commentCtrl.modifyComment);
-//route pour créer un commentaire, nécessite l'authentification
-router.get("/comment/getOne/:id", commentCtrl.getOneComment);
+//route pour accéder à un commentaire, nécessite l'authentification
+router.get("/comment/getOne/:id", auth, commentCtrl.getOneComment);
+//route pour accéder à tous les commentaires, nécessite l'authentification
+router.post("/comment/getAll/:id", auth, commentCtrl.getAllComment);
 
 //exportation du router
 module.exports = router;

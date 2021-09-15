@@ -7,7 +7,9 @@
                 <p class="user_username">{{ object.username }}</p>
                 <p class="user_bio">
                     {{ object.bio }}
-                    <a v-on:click="continu" class="user_click">la suite...</a>
+                    <a v-on:click="continu" class="user_click"
+                        >Suite de la biographie...</a
+                    >
                 </p>
                 <div
                     class="user_bio_two"
