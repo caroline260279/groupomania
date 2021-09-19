@@ -35,11 +35,6 @@
                 </button>
             </div>
         </form>
-        <a href="">
-            <router-link to="/welcome" class="menu"
-                >tout me convient, retour à mon compte...
-            </router-link></a
-        >
     </div>
 </template>
 <script>
@@ -114,8 +109,6 @@ export default {
 <style lang="scss">
 .gifToModif {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
     border: 2px solid black;
     border-radius: 10px;
     width: 70%;
@@ -141,6 +134,7 @@ export default {
     .h1_gifToModif {
         margin: 20px 10%;
         font-size: 25px;
+        text-align: center;
     }
     .gifToModif_title {
         width: 90%;
@@ -195,6 +189,178 @@ export default {
             border: 2px solid black;
             box-shadow: 3px 3px black;
             font-size: 12px;
+        }
+    }
+}
+@media screen and (min-width: 481px) {
+    .gifToModif {
+        width: 70%;
+        margin: 0 15% 20px 15%;
+        .title_gifToModif {
+            font-size: 30px;
+            padding: 10px 10% 5px 10%;
+        }
+        .img_gifToModif {
+            width: 90%;
+            margin: 0 5% 20px 5%;
+            height: 350px;
+        }
+    }
+    .form_modif {
+        width: 90%;
+        margin: 0 5%;
+        .h1_gifToModif {
+            margin: 20px 10%;
+            font-size: 30px;
+        }
+        .gifToModif_title {
+            width: 70%;
+            margin: 0 15% 30px 15%;
+            .title_gifToModif {
+                font-size: 20px;
+            }
+            #title_gifToModif {
+                width: 230px;
+            }
+        }
+        .gifToModif_file {
+            width: 70%;
+            margin: 0 15% 30px 15%;
+            .file_gifToModif {
+                font-size: 20px;
+            }
+            #file_gifToModif {
+                width: 230px;
+            }
+        }
+        .button_gifToModif {
+            width: 60%;
+            margin: 20px 20% 30px 20%;
+            .button_post_gif {
+                margin-right: 10%;
+                font-size: 15px;
+                width: 50%;
+            }
+            .button_close_gifwindow {
+                width: 50%;
+                font-size: 15px;
+            }
+        }
+    }
+}
+@media screen and (min-width: 769px) {
+    .gifToModif {
+        width: 70%;
+        margin: 0 15% 20px 15%;
+        .title_gifToModif {
+            font-size: 40px;
+            padding: 10px 10% 5px 10%;
+        }
+        .img_gifToModif {
+            width: 90%;
+            margin: 0 5% 20px 5%;
+            height: 500px;
+        }
+    }
+    .form_modif {
+        width: 90%;
+        margin: 0 5%;
+        .h1_gifToModif {
+            margin: 30px 10% 50px 10%;
+            font-size: 40px;
+        }
+        .gifToModif_title {
+            width: 70%;
+            margin: 0 15% 30px 15%;
+            .title_gifToModif {
+                font-size: 30px;
+            }
+            #title_gifToModif {
+                width: 350px;
+                font-size: 20px;
+            }
+        }
+        .gifToModif_file {
+            width: 70%;
+            margin: 0 15% 50px 15%;
+            .file_gifToModif {
+                font-size: 30px;
+            }
+            #file_gifToModif {
+                width: 350px;
+                font-size: 20px;
+            }
+        }
+        .button_gifToModif {
+            width: 60%;
+            margin: 20px 20% 30px 20%;
+            .button_post_gif {
+                margin-right: 10%;
+                font-size: 20px;
+                width: 50%;
+            }
+            .button_close_gifwindow {
+                width: 50%;
+                font-size: 20px;
+            }
+        }
+    }
+}
+@media screen and (min-width: 1280px) {
+    .gifToModif {
+        width: 60%;
+        margin: 0 20% 20px 20%;
+        .title_gifToModif {
+            font-size: 40px;
+            padding: 10px 10% 5px 10%;
+        }
+        .img_gifToModif {
+            width: 90%;
+            margin: 0 5% 20px 5%;
+            height: 500px;
+        }
+    }
+    .form_modif {
+        width: 70%;
+        margin: 0 15%;
+        .h1_gifToModif {
+            margin: 30px 20% 50px 20%;
+            font-size: 40px;
+        }
+        .gifToModif_title {
+            width: 70%;
+            margin: 0 15% 30px 15%;
+            .title_gifToModif {
+                font-size: 30px;
+            }
+            #title_gifToModif {
+                width: 400px;
+                font-size: 20px;
+            }
+        }
+        .gifToModif_file {
+            width: 70%;
+            margin: 0 15% 50px 15%;
+            .file_gifToModif {
+                font-size: 30px;
+            }
+            #file_gifToModif {
+                width: 400px;
+                font-size: 20px;
+            }
+        }
+        .button_gifToModif {
+            width: 60%;
+            margin: 20px 20% 30px 20%;
+            .button_post_gif {
+                margin-right: 10%;
+                font-size: 20px;
+                width: 50%;
+            }
+            .button_close_gifwindow {
+                width: 50%;
+                font-size: 20px;
+            }
         }
     }
 }

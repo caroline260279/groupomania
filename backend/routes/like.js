@@ -10,6 +10,12 @@ const likeCtrl = require("../controllers/like");
 //importation du middelware d'authentification
 const auth = require("../middelware/auth");
 
+//route pour récupérer les likes/dislikes
+router.get("/getOneLike/:id", auth, likeCtrl.getOneLike);
+
+//route pour récupérer les likes/dislikes
+router.get("/getAllLike/:id", auth, likeCtrl.getAllLike);
+
 //route pour créer le like/dislike
 router.post("/like/:id", auth, likeCtrl.createLike);
 

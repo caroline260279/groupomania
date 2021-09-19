@@ -1,7 +1,7 @@
 <template>
     <div id="allGif">
         <ul id="ul_all_gif">
-            <li v-for="value in object" v-bind:key="value" class="all_gif">
+            <li v-for="value in object" v-bind:key="value.id" class="all_gif">
                 <div class="title_allgif">{{ value.title }}</div>
                 <div>
                     <img
@@ -12,7 +12,11 @@
                 </div>
                 <div class="row1_allgif">
                     <div class="like_allgif">
-                        <button class="button_heart_allgif">
+                        <button
+                            class="button_heart_allgif"
+                            type="button"
+                            @click="like(value.id)"
+                        >
                             <i class="far fa-heart"></i>
                         </button>
                         <p class="number_like">17</p>
@@ -26,7 +30,6 @@
                         }}
                     </p>
                 </div>
-
                 <form class="row2_allgif" action="">
                     <label class="label_gifuser" for="comment"></label>
                     <input
@@ -38,14 +41,22 @@
                     <button
                         class=" button_comment_allgif"
                         type="button"
-                        @click="createcomment()"
+                        @click="createcomment(value.id)"
                     >
                         Commenter
                     </button>
                 </form>
-                <button class="button_show_comment" @click="showcomment()">
-                    voire les commentaires
+                <button class=" " type="button" @click="showcomment(value.id)">
+                    voir les commentaires
                 </button>
+                <ul v-bind:style="{ display: computeddisplay }">
+                    <li
+                        v-for="(valeur, index) in object.message"
+                        v-bind:key="index"
+                    >
+                        <p>{{ valeur.comment }}</p>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>
@@ -64,12 +75,25 @@ export default {
                 imageUrl: "",
                 createdAt: "",
                 updatedAt: "",
+                message: {
+                    id: "",
+                    userid: "",
+                    comment: "",
+                    gifid: "",
+                    createdAt: "",
+                    updatedAt: "",
+                },
             },
+
+            display: "none",
         };
     },
     computed: {
         modifDate() {
             return this.createdAt.getDay();
+        },
+        computeddisplay: function() {
+            return this.display;
         },
     },
     created() {
@@ -80,6 +104,49 @@ export default {
             instance
                 .post("http://localhost:3000/gif")
                 .then((response) => (this.object = response.data));
+        },
+        createcomment(y) {
+            let comment = { comment: this.comment };
+            console.log(comment);
+            instance
+                .post("http://localhost:3000/comment/" + y, comment)
+                .then((response) => console.log(response))
+                .catch(() =>
+                    console.log("le commentaire n'a pas été pris en compte")
+                );
+        },
+        showcomment(x) {
+            instance
+                .post("http://localhost:3000/comment/getAll/" + x)
+                .then(
+                    (resp) =>
+                        console.log(
+                            resp.data
+                        ) /*(this.object.message = resp.data)*/
+                )
+                .then(() => (this.display = "block"));
+        },
+        close: function() {
+            this.display = "none";
+        },
+        async like(z) {
+            let like = await instance
+                .post("http://localhost:3000/like/" + z)
+                .then(
+                    (resp) =>
+                        console.log(
+                            resp.data
+                        ) /*(this.object.message = resp.data)*/
+                );
+            console.log(like);
+            instance
+                .post("http://localhost:3000/like/" + z)
+                .then(
+                    (resp) =>
+                        console.log(
+                            resp.data
+                        ) /*(this.object.message = resp.data)*/
+                );
         },
     },
 };
@@ -211,6 +278,11 @@ export default {
                 }
                 .row1_allgif {
                     font-size: 18px;
+                    .like_allgif {
+                        .button_heart_allgif {
+                            font-size: 15px;
+                        }
+                    }
                 }
                 .row1_allgif {
                     margin: 5px 5% 20px 5%;
@@ -242,6 +314,11 @@ export default {
                 }
                 .row1_allgif {
                     font-size: 22px;
+                    .like_allgif {
+                        .button_heart_allgif {
+                            font-size: 20px;
+                        }
+                    }
                 }
                 .row2_allgif {
                     .button_comment_allgif {

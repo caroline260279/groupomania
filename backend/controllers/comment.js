@@ -75,12 +75,13 @@ exports.getAllComment = async (req, res, next) => {
     model.Gif_comment.findAll({
         where: { gifid: gifId },
         order: [["updatedAt", "DESC"]],
-    }).then((Gif_comment) => {
-        res.status(200).send(Gif_comment);
-    });
-    /* .catch((error) => {
+    })
+        .then((Gif_comment) => {
+            res.status(200).send(Gif_comment);
+        })
+        .catch((error) => {
             res.status(400).json({
                 error: error,
             });
-        });*/
+        });
 };
