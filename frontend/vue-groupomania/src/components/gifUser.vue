@@ -12,10 +12,15 @@
                 </div>
                 <div class="row1_gifuser">
                     <div class="like_gifuser">
-                        <button class="button_heart_gifuser">
+                        <button
+                            class="button_heart_gifuser"
+                            @click="like(value.id)"
+                        >
                             <i class="far fa-heart"></i>
                         </button>
-                        <p class="number_like_gifuser">17</p>
+                        <p class="number_like_gifuser">
+                            {{ value.gif_likes.length }}
+                        </p>
                     </div>
                     <p class="date_gifuser">
                         dernière mise à jour le
@@ -32,14 +37,37 @@
                     <button
                         class="button_comment_gifuser"
                         type="button"
-                        @click="createcomment()"
+                        @click="createcomment(value.id)"
                     >
                         Commenter
                     </button>
                 </form>
-                <button class="button_show_comment_gifuser">
+                <button
+                    class="button_show_comment_gifuser"
+                    @click="showcomment(value.id)"
+                >
                     voire les commentaires
                 </button>
+
+                <ul class="ul_comment_gifuser" v-if="value.id === this.show">
+                    <li
+                        class="list_comment_gifuser"
+                        v-for="valeur in object.message"
+                        v-bind:key="valeur"
+                    >
+                        <p class="p_user_comment_gifuser">
+                            <span class="span_user_comment_gifuser"
+                                >{{ valeur.user.username }}
+                            </span>
+                            a commenté:
+                        </p>
+                        <p class="p_comment_gifuser">{{ valeur.comment }}</p>
+                    </li>
+                </ul>
+                <p class="p_nocomment_gifuser" v-if="value.id === -this.show">
+                    Ce gif n'a pas encore de commentaire, soyez le premier...
+                </p>
+
                 <div class="button_gifuser_modif">
                     <button
                         class="button_modifGif"
@@ -67,12 +95,39 @@ export default {
     name: "gifuser",
     data() {
         return {
-            object: {
-                id: "",
-                title: "",
-                imageUrl: "",
-                updatedAt: "",
-            },
+            object: [
+                {
+                    id: "",
+                    userid: "",
+                    title: "",
+                    imageUrl: "",
+                    createdAt: "",
+                    updatedAt: "",
+                    gif_likes: {
+                        jaime: "",
+                    },
+                    user: {
+                        username: "",
+                        photo: "",
+                    },
+                    message: [
+                        {
+                            id: "",
+                            userid: "",
+                            comment: "",
+                            gifid: "",
+                            createdAt: "",
+                            updatedAt: "",
+                            user: {
+                                username: "",
+                                photo: "",
+                            },
+                        },
+                    ],
+                },
+            ],
+            show: 0,
+            heart: 0,
         };
     },
 
@@ -95,10 +150,51 @@ export default {
         deleteGif(y) {
             instance
                 .delete("http://localhost:3000/delete/" + y)
-                .then(() => location.reload())
+                .then(() => this.user())
                 .catch(() => {
                     console.log("echec");
                 });
+        },
+        createcomment(y) {
+            let comment = { comment: this.comment };
+            console.log(comment);
+            instance
+                .post("http://localhost:3000/comment/" + y, comment)
+                .then(() => {
+                    this.comment = "";
+                    this.showcomment(y);
+                })
+                .catch(() =>
+                    console.log("le commentaire n'a pas été pris en compte")
+                );
+        },
+        showcomment(x) {
+            instance
+                .post("http://localhost:3000/comment/getAll/" + x)
+                .then((resp) => (this.object.message = resp.data))
+                .then((resp) => {
+                    if (resp.length > 0) {
+                        this.show = x;
+                    } else {
+                        this.show = -x;
+                    }
+                });
+        },
+        async like(z) {
+            let like = await instance
+                .get("http://localhost:3000/getOneLike/" + z)
+                .then((resp) => resp.data.jaime);
+            console.log(like);
+            if (like != true) {
+                instance.post("http://localhost:3000/like/" + z).then(() => {
+                    this.heart = z;
+                    this.user();
+                });
+            } else {
+                instance
+                    .delete("http://localhost:3000/like/delete/" + z)
+                    .then(() => this.user());
+            }
         },
     },
 };
@@ -201,6 +297,30 @@ export default {
                 box-shadow: 3px 3px black;
             }
         }
+        .ul_comment_gifuser {
+            margin: 10px 5% 0 5%;
+            .list_comment_gifuser {
+                margin: 0;
+                padding: 0;
+                list-style-type: disc;
+                .p_user_comment_gifuser {
+                    margin: 0;
+                    padding: 0;
+                    .span_user_comment_gifuser {
+                        font-weight: bold;
+                    }
+                }
+                .p_comment_gifuser {
+                    margin: 0 20px 10px 20px;
+                    padding: 0;
+                }
+            }
+        }
+        .p_nocomment_gifuser {
+            margin: 10px 10%;
+            text-align: center;
+            font-size: 12px;
+        }
     }
 }
 @media screen and (min-width: 481px) {
@@ -302,6 +422,15 @@ export default {
                     font-size: 18px;
                 }
             }
+            .ul_comment_gifuser {
+                margin: 10px 5% 0 5%;
+                .list_comment_gifuser {
+                    font-size: 18px;
+                }
+            }
+            .p_nocomment_gifuser {
+                font-size: 18px;
+            }
         }
     }
 }
@@ -352,6 +481,9 @@ export default {
                     width: 40%;
                     font-size: 22px;
                 }
+            }
+            .p_nocomment_gifuser {
+                font-size: 22px;
             }
         }
     }

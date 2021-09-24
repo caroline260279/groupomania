@@ -65,9 +65,7 @@ export default {
             instance
                 .get("http://localhost:3000/" + gifIdToModif)
                 .then((response) => (this.object = response.data))
-                .catch(() => {
-                    console.log("echec");
-                });
+                .catch(() => this.$router.push("/"));
         },
 
         updateGif() {
@@ -82,7 +80,7 @@ export default {
                         "http://localhost:3000/modify/" + gifIdToModif,
                         formData
                     )
-                    .then(() => location.reload())
+                    .then(() => this.$router.push("/welcome"))
                     .catch(() => {
                         console.log("echec");
                     });
@@ -93,7 +91,7 @@ export default {
                         "http://localhost:3000/modify/" + gifIdToModif,
                         formData
                     )
-                    .then(() => location.reload())
+                    .then(() => this.$router.push("/welcome"))
                     .catch(() => {
                         console.log("echec");
                     });

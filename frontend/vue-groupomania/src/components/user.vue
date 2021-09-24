@@ -71,11 +71,15 @@ export default {
         async user() {
             const userConnected = await instance
                 .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.id);
+                .then((resp) => resp.data.id)
+                .catch(() => this.$router.push("/"));
+
             console.log(userConnected);
             instance
                 .get("http://localhost:3000/auth/" + userConnected)
-                .then((response) => (this.object = response.data));
+                .then((response) => (this.object = response.data))
+
+                .catch(() => this.$router.push("/"));
         },
         continu: function() {
             this.display = "block";
@@ -135,8 +139,6 @@ export default {
     #img_user {
         width: 120px;
         height: 120px;
-        margin: 0 20px;
-        overflow: hidden;
         object-fit: cover;
         border: 2px solid black;
         border-radius: 50%;

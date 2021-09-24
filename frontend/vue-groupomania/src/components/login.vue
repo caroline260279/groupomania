@@ -220,7 +220,7 @@ export default {
             padding-bottom: 50px;
             #email {
                 width: 170px;
-                font-size: 15px;
+                font-size: 13px;
             }
             .label_login {
                 font-size: 15px;
@@ -236,7 +236,7 @@ export default {
         .login_mdp {
             #password {
                 width: 170px;
-                font-size: 15px;
+                font-size: 13px;
             }
             .label_login {
                 font-size: 15px;
@@ -261,7 +261,7 @@ export default {
             margin-top: 50px;
             #email {
                 width: 240px;
-                font-size: 23px;
+                font-size: 15px;
             }
             .label_login {
                 font-size: 23px;
@@ -278,7 +278,7 @@ export default {
             margin-bottom: 50px;
             #password {
                 width: 240px;
-                font-size: 23px;
+                font-size: 15px;
             }
             .label_login {
                 font-size: 23px;

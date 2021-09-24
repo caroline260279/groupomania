@@ -87,7 +87,8 @@ export default {
         async user() {
             const userConnected = await instance
                 .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.id);
+                .then((resp) => resp.data.id)
+                .catch(() => this.$router.push("/"));
             console.log(userConnected);
             instance
                 .get("http://localhost:3000/auth/" + userConnected)

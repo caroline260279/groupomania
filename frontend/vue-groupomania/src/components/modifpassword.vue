@@ -38,10 +38,12 @@ export default {
         async submit() {
             const userConnected = await instance
                 .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.id);
+                .then((resp) => resp.data.id)
+                .catch(() => this.$router.push("/"));
             const userConnectedemail = await instance
                 .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.email);
+                .then((resp) => resp.data.email)
+                .catch(() => this.$router.push("/"));
             const user = { email: userConnectedemail, password: this.password };
             console.log(userConnected);
             const formData = new FormData();
@@ -102,6 +104,107 @@ export default {
         text-align: center;
         margin: 20px 0;
         color: red;
+    }
+}
+@media screen and (min-width: 481px) {
+    #delete_user {
+        width: 80%;
+        margin: 50px 10% 0 10%;
+
+        font-size: 20px;
+        .mdp_modif {
+            .label_mdp_modif {
+                margin: 20px 0;
+                font-size: 25px;
+            }
+            #password_modif {
+                width: 70%;
+                margin: 20px 15%;
+                font-size: 20px;
+            }
+            .button_modif_password {
+                width: 40%;
+                margin: 0 30%;
+                font-size: 15px;
+            }
+        }
+        .link_modif_password {
+            width: 100%;
+
+            font-size: 15px;
+        }
+        .modif_ok {
+            widows: 100%;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+    }
+}
+@media screen and (min-width: 769px) {
+    #delete_user {
+        width: 80%;
+        margin: 50px 10% 0 10%;
+
+        font-size: 20px;
+        .mdp_modif {
+            .label_mdp_modif {
+                margin: 40px 0;
+                font-size: 30px;
+            }
+            #password_modif {
+                width: 60%;
+                margin: 40px 20%;
+                font-size: 20px;
+            }
+            .button_modif_password {
+                width: 40%;
+                margin: 0 30%;
+                font-size: 20px;
+            }
+        }
+        .link_modif_password {
+            width: 100%;
+
+            font-size: 18px;
+        }
+        .modif_ok {
+            widows: 100%;
+            margin: 20px 0;
+            font-size: 22px;
+        }
+    }
+}
+@media screen and (min-width: 1280px) {
+    #delete_user {
+        width: 60%;
+        margin: 50px 20% 0 20%;
+
+        font-size: 20px;
+        .mdp_modif {
+            .label_mdp_modif {
+                font-size: 30px;
+            }
+            #password_modif {
+                width: 60%;
+                margin: 40px 20%;
+                font-size: 20px;
+            }
+            .button_modif_password {
+                width: 40%;
+                margin: 0 30%;
+                font-size: 20px;
+            }
+        }
+        .link_modif_password {
+            width: 100%;
+
+            font-size: 18px;
+        }
+        .modif_ok {
+            widows: 100%;
+            margin: 20px 0;
+            font-size: 22px;
+        }
     }
 }
 </style>

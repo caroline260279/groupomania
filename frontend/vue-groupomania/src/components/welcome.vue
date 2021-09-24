@@ -114,7 +114,6 @@ export default {
         onFileSelectedGif(event) {
             this.selectedFileGif = event.target.files[0];
         },
-
         appearGifWindow: function() {
             this.display = "block";
         },
@@ -127,7 +126,7 @@ export default {
             formData.append("image", this.selectedFileGif);
             instance
                 .post("http://localhost:3000/", formData)
-                .then(() => location.reload())
+                .then(() => this.$router.push("/allgifs"))
                 .catch(() => {
                     console.log("Oups, votre gif n'a pas pu être publié...");
                 });

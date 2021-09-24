@@ -75,6 +75,7 @@ exports.getAllComment = async (req, res, next) => {
     model.Gif_comment.findAll({
         where: { gifid: gifId },
         order: [["updatedAt", "DESC"]],
+        include: [model.User],
     })
         .then((Gif_comment) => {
             res.status(200).send(Gif_comment);

@@ -79,7 +79,6 @@ exports.modifyGif = async (req, res, next) => {
 
 //suppression du gif selectionné
 exports.deleteGif = (req, res, next) => {
-    console.log(req.params.id);
     model.Gif.findOne({ where: { id: req.params.id } })
         .then((gifs) => {
             const filename = gifs.imageUrl.split("/images/")[1];
@@ -109,6 +108,7 @@ exports.getAllGifUser = async (req, res, next) => {
     model.Gif.findAll({
         where: { userid: userId },
         order: [["updatedAt", "DESC"]],
+        include: [model.User, model.Gif_like],
     })
         .then((gifs) => {
             res.status(200).send(gifs);
@@ -122,7 +122,10 @@ exports.getAllGifUser = async (req, res, next) => {
 
 //récupération de tous les gifs
 exports.getAllGif = (req, res, next) => {
-    model.Gif.findAll({ order: [["updatedAt", "DESC"]] })
+    model.Gif.findAll({
+        order: [["updatedAt", "DESC"]],
+        include: [model.User, model.Gif_like],
+    })
         .then((gifs) => {
             res.status(200).send(gifs);
         })
