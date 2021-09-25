@@ -142,6 +142,7 @@ export default {
                     instance
                         .get("http://localhost:3000/gif/" + resp.data.username)
                         .then((response) => (this.object = response.data))
+                        .catch(() => this.$router.push("/"))
                 );
         },
         update(x) {

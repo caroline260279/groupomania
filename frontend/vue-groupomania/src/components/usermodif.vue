@@ -78,6 +78,7 @@ export default {
     },
     created() {
         this.user();
+        this.verif();
     },
 
     methods: {
@@ -89,7 +90,6 @@ export default {
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => resp.data.id)
                 .catch(() => this.$router.push("/"));
-            console.log(userConnected);
             instance
                 .get("http://localhost:3000/auth/" + userConnected)
                 .then((response) => (this.object = response.data));
@@ -118,6 +118,20 @@ export default {
                 .catch(() => {
                     this.display = "block";
                 });
+        },
+        async verif() {
+            let id = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => resp.data.id)
+                .catch(() => console.log("erreur"));
+            let idparams = this.$route.params.id;
+            console.log(id);
+            console.log(idparams);
+            if (idparams != id) {
+                this.$router.push("/allgifs");
+            } else {
+                console.log("vous n'avez pas à etre redirigé");
+            }
         },
     },
 };

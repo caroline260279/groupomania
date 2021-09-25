@@ -30,8 +30,8 @@
                 <button class="button_post_gif" @click="updateGif()">
                     Valider les modifications
                 </button>
-                <button class="button_close_gifwindow" @click="closefModif()">
-                    Tout me convient!
+                <button class="button_close_gifwindow" @click="deleteGif()">
+                    Supprimer ce gif
                 </button>
             </div>
         </form>
@@ -55,6 +55,7 @@ export default {
     },
     created() {
         this.gifModif();
+        this.verif();
     },
     methods: {
         onFileSelected(event) {
@@ -67,7 +68,15 @@ export default {
                 .then((response) => (this.object = response.data))
                 .catch(() => this.$router.push("/"));
         },
-
+        deleteGif() {
+            let gif = this.$route.params.id;
+            instance
+                .delete("http://localhost:3000/delete/" + gif)
+                .then(() => this.$router.push("/allgifs"))
+                .catch(() => {
+                    console.log("echec");
+                });
+        },
         updateGif() {
             let gifIdToModif = this.$route.params.id;
             const formData = new FormData();
@@ -97,7 +106,27 @@ export default {
                     });
             }
         },
+        async verif() {
+            let gifIdToModif = this.$route.params.id;
 
+            let userid = await instance
+                .get("http://localhost:3000/" + gifIdToModif)
+                .then((response) => response.data.userid);
+
+            let useridFromToken = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((response) => response.data.id);
+
+            let caro = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((response) => response.data.admin);
+
+            if (caro != true && userid != useridFromToken) {
+                this.$router.push("/allgifs");
+            } else {
+                console.log("vous n'avez pas à etre redirigé");
+            }
+        },
         closefModif() {
             this.$router.push("/welcome");
         },

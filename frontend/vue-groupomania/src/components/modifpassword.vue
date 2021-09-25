@@ -34,6 +34,9 @@ export default {
             return this.display;
         },
     },
+    created() {
+        this.connect();
+    },
     methods: {
         async submit() {
             const userConnected = await instance
@@ -61,6 +64,12 @@ export default {
                         )
                         .then(() => (this.display = "block"))
                 );
+        },
+        connect() {
+            instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then(() => console.log("Vous êtes connecté"))
+                .catch(() => this.$router.push("/"));
         },
     },
 };

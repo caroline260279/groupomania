@@ -6,6 +6,9 @@
             </label>
 
             <input id="delete" type="text" v-model="email" />
+            <div class="no_autorisation" v-if="autorisation === 1">
+                Vous n'êtes pas autorisé à supprimer ce compte
+            </div>
             <button class="button_delete_user" @click="deleteUser()">
                 Je supprime mon compte
             </button>
@@ -20,19 +23,52 @@ export default {
     data() {
         return {
             email: "",
+            autorisation: 0,
         };
     },
+    created() {
+        this.connect();
+    },
     methods: {
-        deleteUser() {
-            const user = { email: this.email };
+        async deleteUser() {
+            const emailToCheck = this.email;
+            let email = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => resp.data.email)
+                .catch(() => console.log("erreur"));
+            let admin = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => resp.data.admin)
+                .catch(() => console.log("erreur"));
+            console.log(admin);
+            console.log(emailToCheck);
+            if (email != emailToCheck && (admin = false)) {
+                this.autorisation = 1;
+            } else {
+                const user = { email: this.email };
+                instance
+                    .delete("http://localhost:3000/auth/delete", {
+                        data: user,
+                    })
+                    .then(() => {
+                        this.$router.push("/");
+                        /*   if ((admin = true)) {
+                            this.$router.push("/allgifs");
+                        } else {
+                           
+                        }*/
+                    })
+                    .catch(() => {
+                        console.log("l'utilisateur n'a pas été supprimé");
+                    });
+            }
+        },
+
+        connect() {
             instance
-                .delete("http://localhost:3000/auth/delete", {
-                    data: user,
-                })
-                .then(() => this.$router.push("/"))
-                .catch(() => {
-                    console.log("l'utilisateur n'a pas été supprimé");
-                });
+                .get("http://localhost:3000/auth/user/connected/")
+                .then(() => console.log("Vous êtes connecté"))
+                .catch(() => this.$router.push("/"));
         },
     },
 };
@@ -53,6 +89,11 @@ export default {
             width: 100%;
             margin: 20px 0;
             border: 2px solid black;
+        }
+        .no_autorisation {
+            text-align: center;
+            color: red;
+            margin: 0 0 20px 0;
         }
         .button_delete_user {
             width: 50%;
@@ -95,6 +136,10 @@ export default {
                 margin: 40px 15%;
                 font-size: 25px;
             }
+            .no_autorisation {
+                font-size: 25px;
+                margin: 0 0 30px 0;
+            }
             .button_delete_user {
                 width: 40%;
                 margin: 0 30%;
@@ -120,6 +165,10 @@ export default {
                 width: 70%;
                 margin: 40px 15%;
                 font-size: 25px;
+            }
+            .no_autorisation {
+                font-size: 25px;
+                margin: 0 0 30px 0;
             }
             .button_delete_user {
                 width: 40%;

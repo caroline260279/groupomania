@@ -7,6 +7,7 @@ import modifgif from "../views/modifgif.vue";
 import modifuser from "../views/modifuser.vue";
 import userdelete from "../views/userdelete.vue";
 import modifPassword from "../views/modifpassword.vue";
+import finduser from "../views/user.vue";
 
 const routes = [
     {
@@ -48,6 +49,11 @@ const routes = [
         path: "/password",
         name: "modif_passwod",
         component: modifPassword,
+    },
+    {
+        path: "/finduser",
+        name: "finduser",
+        component: finduser,
     },
 ];
 

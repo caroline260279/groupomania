@@ -27,7 +27,9 @@
                     </li>
 
                     <li class="navigation_connected_list">
-                        Rechercher un utilisateur
+                        <router-link to="/finduser" class="menu">
+                            Rechercher un utilisateur</router-link
+                        >
                     </li>
 
                     <li class="navigation_connected_list">
