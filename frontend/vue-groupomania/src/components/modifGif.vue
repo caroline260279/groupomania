@@ -56,6 +56,7 @@ export default {
     created() {
         this.gifModif();
         this.verif();
+        this.nogif();
     },
     methods: {
         onFileSelected(event) {
@@ -129,6 +130,17 @@ export default {
         },
         closefModif() {
             this.$router.push("/welcome");
+        },
+        async nogif() {
+            let gif = this.$route.params.id;
+            let gifexist = await instance
+                .get("http://localhost:3000/" + gif)
+                .then((response) => response.data.id);
+            if (gifexist > 0) {
+                console.log("vous n'avez pas à etre redirigé");
+            } else {
+                this.$router.push("/allgifs");
+            }
         },
     },
 };

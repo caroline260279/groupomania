@@ -2,28 +2,39 @@
     <div id="allGif">
         <ul id="ul_all_gif">
             <li v-for="value in object" v-bind:key="value" class="all_gif">
-                <div class="user_allgif">
-                    <img
-                        v-bind:src="value.user.photo"
-                        alt=""
-                        class="photo_user_allgif"
-                    />
-                    <div class="username_allgif">
-                        <p class="p_user_allgif">
-                            {{ value.user.username }}
-                        </p>
-                        <p class="date_allgif">
-                            le
-                            {{
-                                new Date(value.updatedAt).toLocaleDateString(
-                                    "fr-FR"
-                                )
-                            }}
-                        </p>
+                <router-link
+                    v-bind:to="`/user/` + value.user.username"
+                    class="user_allgif"
+                >
+                    <div class="user_allgif">
+                        <img
+                            v-bind:src="value.user.photo"
+                            alt="photo de profil de l'utilisateur partageant le gif"
+                            class="photo_user_allgif"
+                        />
+                        <div class="username_allgif">
+                            <p class="p_user_allgif">
+                                {{ value.user.username }}
+                            </p>
+                            <p class="date_allgif">
+                                le
+                                {{
+                                    new Date(
+                                        value.updatedAt
+                                    ).toLocaleDateString("fr-FR")
+                                }}
+                            </p>
+                        </div>
                     </div>
-                </div>
+                </router-link>
                 <div class="title_allgif">
-                    <h2>{{ value.title }}</h2>
+                    <button
+                        class="button_title_allgif"
+                        type="button"
+                        @click="linkadmin(value.id)"
+                    >
+                        <h2>{{ value.title }}</h2>
+                    </button>
                 </div>
                 <div>
                     <img
@@ -88,9 +99,49 @@
                             <span class="span_user_comment_allgif"
                                 >{{ valeur.user.username }}
                             </span>
-                            a commenté:
+                            :
                         </p>
+
                         <p class="p_comment_allgif">{{ valeur.comment }}</p>
+                        <div
+                            v-if="
+                                valeur.user.id === value.userid ||
+                                    valeur.user.admin === true
+                            "
+                            class="button_comment_allgif"
+                        >
+                            <form
+                                class="form_modif_comment"
+                                v-if="valeur.id === this.showmodif"
+                            >
+                                <input
+                                    type="text"
+                                    class="input_modif_comment"
+                                    v-model="commentmodif"
+                                /><button
+                                    class="button_valid_modif_comment_allgif"
+                                    type="button"
+                                    @click="
+                                        validModifComment(valeur.id, value.id)
+                                    "
+                                >
+                                    Valider les modifications
+                                </button>
+                            </form>
+                            <button
+                                class="button_modif_comment_allgif"
+                                type="button"
+                                @click="modifComment(valeur.id)"
+                            >
+                                modifier ce commentaire</button
+                            ><button
+                                class="button_supprim_comment_allgif"
+                                type="button"
+                                @click="supprimComment(valeur.id)"
+                            >
+                                supprimer ce commentaire
+                            </button>
+                        </div>
                     </li>
                 </ul>
                 <p class="p_nocomment_allgif" v-if="value.id === -this.show">
@@ -127,6 +178,7 @@ export default {
                             id: "",
                             userid: "",
                             comment: "",
+                            commentmodif: "",
                             gifid: "",
                             createdAt: "",
                             updatedAt: "",
@@ -141,6 +193,7 @@ export default {
             display: "none",
             show: 0,
             heart: 0,
+            showmodif: 0,
         };
     },
     computed: {
@@ -188,6 +241,22 @@ export default {
                     }
                 });
         },
+        modifComment(x) {
+            return (this.showmodif = x);
+        },
+        validModifComment(v, g) {
+            const modif = { comment: this.commentmodif };
+            instance
+                .put("http://localhost:3000/comment/modify/" + v, modif)
+                .then(() => {
+                    this.showcomment(g);
+                    this.commentmodif = "";
+                    this.showmodif = 0;
+                })
+                .catch(() => {
+                    console.log("echec");
+                });
+        },
         close: function() {
             this.display = "none";
         },
@@ -208,6 +277,21 @@ export default {
                     });
             }
         },
+        async linkadmin(g) {
+            let admin = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => resp.data.admin)
+                .catch(() => console.log("erreur"));
+
+            if (admin === true) {
+                this.$router.push("/gif/" + g);
+            } else {
+                console.log(
+                    "ce lien ne fonctionne que pour les administrateurs"
+                );
+            }
+        },
+        supprimComment() {},
         async blue(h) {
             let response = await instance
                 .get("http://localhost:3000/getOneLike/" + h)
@@ -236,6 +320,8 @@ export default {
                 display: flex;
                 flex-direction: row;
                 flex-wrap: nowrap;
+                text-decoration: none;
+                color: black;
                 .photo_user_allgif {
                     width: 50px;
                     margin: 20px 20px 0 20px;
@@ -263,12 +349,17 @@ export default {
             }
 
             .title_allgif {
-                font-size: 20px;
                 text-align: center;
-                margin: 5px 0 10px 0;
-                font-weight: bold;
-                h2 {
-                    margin: 0;
+                .button_title_allgif {
+                    border: none;
+                    background-color: white;
+                    font-size: 20px;
+                    font-weight: bold;
+
+                    margin: 20px 0;
+                    h2 {
+                        margin: 0;
+                    }
                 }
             }
             .img_allgif {
@@ -357,6 +448,45 @@ export default {
                 margin: 0 20px 10px 20px;
                 padding: 0;
             }
+            .button_comment_allgif {
+                width: 80%;
+                margin: 0 10% 10px 10%;
+                .form_modif_comment {
+                    width: 100%;
+                    margin: 10px 0;
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    .input_modif_comment {
+                        width: 65%;
+                        border: 2px solid black;
+                        font-size: 10px;
+                        margin-right: 5%;
+                    }
+                    .button_valid_modif_comment_allgif {
+                        font-size: 10px;
+                        width: 30%;
+                        background-color: white;
+                        border: 2px solid black;
+                        box-shadow: 3px 3px black;
+                    }
+                }
+                .button_modif_comment_allgif {
+                    width: 45%;
+                    font-size: 10px;
+                    margin: 0 10% 0 0;
+                    background-color: white;
+                    border: 2px solid black;
+                    box-shadow: 3px 3px black;
+                }
+                .button_supprim_comment_allgif {
+                    width: 45%;
+                    font-size: 10px;
+                    background-color: white;
+                    border: 2px solid black;
+                    box-shadow: 3px 3px black;
+                }
+            }
         }
     }
     .p_nocomment_allgif {
@@ -390,10 +520,11 @@ export default {
                         }
                     }
                 }
-                .title_allgif {
+                .button_title_allgif {
                     font-size: 22px;
                     margin: 20px 0 20px 0;
                 }
+
                 .img_allgif {
                     height: 320px;
                 }
@@ -401,8 +532,18 @@ export default {
                     font-size: 14px;
                 }
                 .row2_allgif {
-                    .button_comment_allgif {
-                        font-size: 14px;
+                    font-size: 14px;
+                }
+                .button_comment_allgif {
+                    font-size: 14px;
+                    width: 80%;
+                    margin: 0 10% 10px 10%;
+
+                    .button_modif_comment_allgif {
+                        font-size: 11px;
+                    }
+                    .button_supprim_comment_allgif {
+                        font-size: 11px;
                     }
                 }
             }
@@ -415,7 +556,7 @@ export default {
         margin: 0 20%;
         #ul_all_gif {
             .all_gif {
-                .title_allgif {
+                .button_title_allgif {
                     font-size: 28px;
                     margin: 20px 0 25px 0;
                 }
@@ -437,6 +578,26 @@ export default {
                     margin: 0 5% 20px 5%;
                     .button_comment_allgif {
                         font-size: 18px;
+                    }
+                }
+                .button_comment_allgif {
+                    width: 80%;
+                    margin: 0 10% 10px 10%;
+                    .form_modif_comment {
+                        margin: 20px 0;
+
+                        .input_modif_comment {
+                            font-size: 14px;
+                        }
+                        .button_valid_modif_comment_allgif {
+                            font-size: 14px;
+                        }
+                    }
+                    .button_modif_comment_allgif {
+                        font-size: 14px;
+                    }
+                    .button_supprim_comment_allgif {
+                        font-size: 14px;
                     }
                 }
             }
@@ -482,7 +643,9 @@ export default {
                     }
                 }
                 .title_allgif {
-                    font-size: 35px;
+                    .button_title_allgif {
+                        font-size: 35px;
+                    }
                 }
                 .img_allgif {
                     height: 450px;
@@ -498,6 +661,17 @@ export default {
                 .row2_allgif {
                     .button_comment_allgif {
                         font-size: 22px;
+                    }
+                }
+                .button_comment_allgif {
+                    width: 80%;
+                    margin: 0 10% 10px 10%;
+
+                    .button_modif_comment_allgif {
+                        font-size: 14px;
+                    }
+                    .button_supprim_comment_allgif {
+                        font-size: 14px;
                     }
                 }
                 .button_show_comment {
