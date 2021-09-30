@@ -1,18 +1,11 @@
 <template>
     <div id="delete_user">
-        <form class="deleteUser" action="">
-            <label class="label_delete" for="delete"
-                >Confirmer votre adresse email :
-            </label>
-
-            <input id="delete" type="text" v-model="email" />
-            <div class="no_autorisation" v-if="autorisation === 1">
-                Vous n'êtes pas autorisé à supprimer ce compte
-            </div>
-            <button class="button_delete_user" @click="deleteUser()">
-                Je supprime mon compte
-            </button>
-        </form>
+        <h1 class="title_delete_user">
+            Attention, cette action est irréversible!
+        </h1>
+        <button class="button_delete_user" @click="deleteUser()">
+            Je supprime mon compte
+        </button>
     </div>
 </template>
 
@@ -31,37 +24,22 @@ export default {
     },
     methods: {
         async deleteUser() {
-            const emailToCheck = this.email;
-
-            let email = await instance
+            let emailUserDelete = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => resp.data.email)
                 .catch(() => console.log("erreur"));
 
-            let admin = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.admin);
-            console.log(admin);
-            if (email != emailToCheck && !(admin = false)) {
-                const user = { email: this.email };
-                instance
-                    .delete("http://localhost:3000/auth/delete", {
-                        data: user,
-                    })
-                    .then(() => {
-                        this.$router.push("/");
-                        /*  if ((admin = true)) {
-                            this.$router.push("/allgifs");
-                        } else {
-
-                        }*/
-                    })
-                    .catch(() => {
-                        console.log("l'utilisateur n'a pas été supprimé");
-                    });
-            } else {
-                this.autorisation = 1;
-            }
+            const user = { email: emailUserDelete };
+            instance
+                .delete("http://localhost:3000/auth/delete", {
+                    data: user,
+                })
+                .then(() => {
+                    this.$router.push("/");
+                })
+                .catch(() => {
+                    console.log("l'utilisateur n'a pas été supprimé");
+                });
         },
 
         connect() {
@@ -76,33 +54,20 @@ export default {
 
 <style lang="scss">
 #delete_user {
-    width: 80%;
-    margin: 50px 10% 0 10%;
-
-    font-size: 20px;
-    .deleteUser {
+    .title_delete_user {
+        color: red;
+        font-size: 20px;
+        width: 80%;
+        margin: 50px 10% 20px 10%;
         text-align: center;
-        .label_delete {
-            margin: 20px 0;
-        }
-        #delete {
-            width: 100%;
-            margin: 20px 0;
-            border: 2px solid black;
-        }
-        .no_autorisation {
-            text-align: center;
-            color: red;
-            margin: 0 0 20px 0;
-        }
-        .button_delete_user {
-            width: 50%;
-            margin: 0 25%;
-            text-align: center;
-            background-color: white;
-            border: 2px solid black;
-            box-shadow: 3px 3px black;
-        }
+    }
+    .button_delete_user {
+        width: 50%;
+        margin: 0 25%;
+        text-align: center;
+        background-color: white;
+        border: 2px solid black;
+        box-shadow: 3px 3px black;
     }
 }
 @media screen and (min-width: 481px) {

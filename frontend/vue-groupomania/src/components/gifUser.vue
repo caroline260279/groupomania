@@ -27,7 +27,7 @@
                         </p>
                     </div>
                     <p class="date_gifuser">
-                        dernière mise à jour le
+                        le
                         {{
                             new Date(value.updatedAt).toLocaleDateString(
                                 "fr-FR"
@@ -178,8 +178,8 @@ export default {
     },
 
     created() {
-        this.user();
         this.userid();
+        this.user();
     },
     methods: {
         user() {
@@ -244,11 +244,11 @@ export default {
                     console.log("echec");
                 });
         },
-        supprimComment(c, g) {
+        supprimComment(comment, gif) {
             instance
-                .delete("http://localhost:3000/comment/delete/" + c)
+                .delete("http://localhost:3000/comment/delete/" + comment)
                 .then(() => {
-                    this.showcomment(g);
+                    this.showcomment(gif);
                 })
                 .catch(() => {
                     console.log("echec");
@@ -258,7 +258,6 @@ export default {
             let like = await instance
                 .get("http://localhost:3000/getOneLike/" + z)
                 .then((resp) => resp.data.jaime);
-            console.log(like);
             if (like != true) {
                 instance.post("http://localhost:3000/like/" + z).then(() => {
                     this.heart = z;

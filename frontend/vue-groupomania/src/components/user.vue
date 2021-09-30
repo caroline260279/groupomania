@@ -7,18 +7,13 @@
                 <p class="user_username">{{ object.username }}</p>
                 <p class="user_bio">
                     {{ object.bio }}
-                    <a v-on:click="continu" class="user_click"
-                        >Suite de la biographie...</a
-                    >
+                    <a v-on:click="continu" class="user_click">...</a>
                 </p>
                 <div
                     class="user_bio_two"
                     v-bind:style="{ display: computeddisplay }"
                 >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Architecto ipsa voluptas impedit dicta eius dolore libero
-                    quo quidem, quas vero asperiores tempore temporibus nostrum
-                    eligendi veritatis laborum et delectus rem.
+                    {{ object.bio }}
                     <p v-on:click="close" class="close_user_bio_two">fermer</p>
                 </div>
             </div>
@@ -71,15 +66,14 @@ export default {
         async user() {
             const userConnected = await instance
                 .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.id);
-            /* .catch(() => this.$router.push("/"));*/
+                .then((resp) => resp.data.id)
+                .catch(() => this.$router.push("/"));
 
-            console.log(userConnected);
             instance
                 .get("http://localhost:3000/auth/" + userConnected)
-                .then((response) => (this.object = response.data));
+                .then((response) => (this.object = response.data))
 
-            /* .catch(() => this.$router.push("/"));*/
+                .catch(() => this.$router.push("/"));
         },
         continu: function() {
             this.display = "block";

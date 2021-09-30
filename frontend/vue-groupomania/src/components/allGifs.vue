@@ -100,7 +100,7 @@
                         </p>
 
                         <p class="p_comment_allgif">{{ valeur.comment }}</p>
-                        {{ valeur.userid }}
+
                         <div
                             v-if="
                                 valeur.userid === this.userconnect ||
@@ -201,10 +201,10 @@ export default {
         },
     },
     created() {
+        this.userid();
         this.allGifs();
         this.adminComment();
         this.adminOrNot();
-        this.userid();
     },
 
     mounted() {},

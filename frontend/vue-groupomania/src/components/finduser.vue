@@ -22,7 +22,7 @@
                     v-bind:key="value"
                 >
                     <router-link
-                        v-bind:to="`/user/` + value.username"
+                        v-bind:to="`/username/` + value.username"
                         class="link_finduser"
                     >
                         <img
