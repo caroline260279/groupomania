@@ -16,7 +16,11 @@
                             class="button_heart_gifuser"
                             @click="like(value.id)"
                         >
-                            <i class="far fa-heart"></i>
+                            <i
+                                class="far fa-heart empty"
+                                v-if="!blue(value)"
+                            ></i>
+                            <i class="fas fa-heart full" v-if="blue(value)"></i>
                         </button>
                         <p class="number_like_gifuser">
                             {{ value.gif_likes.length }}
@@ -59,9 +63,48 @@
                             <span class="span_user_comment_gifuser"
                                 >{{ valeur.user.username }}
                             </span>
-                            a commenté:
+                            :
                         </p>
                         <p class="p_comment_gifuser">{{ valeur.comment }}</p>
+                        <div
+                            v-if="
+                                valeur.user.id === value.userid ||
+                                    valeur.user.admin === true
+                            "
+                            class="div_form_comment_gifuser"
+                        >
+                            <form
+                                class="form_modif_comment_gifuser"
+                                v-if="valeur.id === this.showmodif"
+                            >
+                                <input
+                                    type="text"
+                                    class="input_modif_comment_gifuser"
+                                    v-model="commentmodif"
+                                /><button
+                                    class="button_valid_modif_comment_gifuser"
+                                    type="button"
+                                    @click="
+                                        validModifComment(valeur.id, value.id)
+                                    "
+                                >
+                                    Valider les modifications
+                                </button>
+                            </form>
+                            <button
+                                class="button_modif_comment_gifuser"
+                                type="button"
+                                @click="modifComment(valeur.id)"
+                            >
+                                modifier ce commentaire</button
+                            ><button
+                                class="button_supprim_comment_gifuser"
+                                type="button"
+                                @click="supprimComment(valeur.id, value.id)"
+                            >
+                                supprimer ce commentaire
+                            </button>
+                        </div>
                     </li>
                 </ul>
                 <p class="p_nocomment_gifuser" v-if="value.id === -this.show">
@@ -115,6 +158,7 @@ export default {
                             id: "",
                             userid: "",
                             comment: "",
+                            commentmodif: "",
                             gifid: "",
                             createdAt: "",
                             updatedAt: "",
@@ -128,11 +172,14 @@ export default {
             ],
             show: 0,
             heart: 0,
+            showmodif: 0,
+            userconnect: 0,
         };
     },
 
     created() {
         this.user();
+        this.userid();
     },
     methods: {
         user() {
@@ -181,6 +228,32 @@ export default {
                     }
                 });
         },
+        modifComment(x) {
+            return (this.showmodif = x);
+        },
+        validModifComment(v, g) {
+            const modif = { comment: this.commentmodif };
+            instance
+                .put("http://localhost:3000/comment/modify/" + v, modif)
+                .then(() => {
+                    this.showcomment(g);
+                    this.commentmodif = "";
+                    this.showmodif = 0;
+                })
+                .catch(() => {
+                    console.log("echec");
+                });
+        },
+        supprimComment(c, g) {
+            instance
+                .delete("http://localhost:3000/comment/delete/" + c)
+                .then(() => {
+                    this.showcomment(g);
+                })
+                .catch(() => {
+                    console.log("echec");
+                });
+        },
         async like(z) {
             let like = await instance
                 .get("http://localhost:3000/getOneLike/" + z)
@@ -196,6 +269,19 @@ export default {
                     .delete("http://localhost:3000/like/delete/" + z)
                     .then(() => this.user());
             }
+        },
+        userid() {
+            instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => (this.userconnect = resp.data.id));
+        },
+        blue(value) {
+            if (Array.isArray(value.gif_likes)) {
+                return value.gif_likes.some(
+                    (like) => like.userid === this.userconnect
+                );
+            }
+            return false;
         },
     },
 };
@@ -237,6 +323,13 @@ export default {
                 .button_heart_gifuser {
                     background-color: white;
                     border: none;
+                    position: relative;
+                    .empty {
+                        color: black;
+                    }
+                    .full {
+                        color: blue;
+                    }
                 }
                 .number_like_gifuser {
                     margin: 0;
@@ -315,6 +408,45 @@ export default {
                     margin: 0 20px 10px 20px;
                     padding: 0;
                 }
+                .div_form_comment_gifuser {
+                    width: 80%;
+                    margin: 0 10% 10px 10%;
+                    .form_modif_comment_gifuser {
+                        width: 100%;
+                        margin: 10px 0;
+                        display: flex;
+                        flex-direction: row;
+                        flex-wrap: nowrap;
+                        .input_modif_comment_gifuser {
+                            width: 65%;
+                            border: 2px solid black;
+                            font-size: 10px;
+                            margin-right: 5%;
+                        }
+                        .button_valid_modif_comment_gifuser {
+                            font-size: 10px;
+                            width: 30%;
+                            background-color: white;
+                            border: 2px solid black;
+                            box-shadow: 3px 3px black;
+                        }
+                    }
+                    .button_modif_comment_gifuser {
+                        width: 45%;
+                        font-size: 10px;
+                        margin: 0 10% 0 0;
+                        background-color: white;
+                        border: 2px solid black;
+                        box-shadow: 3px 3px black;
+                    }
+                    .button_supprim_comment_gifuser {
+                        width: 45%;
+                        font-size: 10px;
+                        background-color: white;
+                        border: 2px solid black;
+                        box-shadow: 3px 3px black;
+                    }
+                }
             }
         }
         .p_nocomment_gifuser {
@@ -341,32 +473,58 @@ export default {
             .row1_gifuser {
                 font-size: 14px;
             }
-        }
-        .comment_gifuser {
-            width: 90%;
-            margin: 0 5% 10px 5%;
-            font-size: 14px;
-            #comment_gifuser {
-                width: 60%;
-                margin-right: 5%;
+
+            .comment_gifuser {
+                width: 90%;
+                margin: 0 5% 10px 5%;
+                font-size: 14px;
+                #comment_gifuser {
+                    width: 60%;
+                    margin-right: 5%;
+                }
+                .button_comment_gifuser {
+                    width: 30%;
+                    font-size: 12px;
+                }
             }
-            .button_comment_gifuser {
-                width: 30%;
-                font-size: 12px;
+            .button_show_comment_gifuser {
+                width: 90%;
+                margin: 0 5% 5px 5%;
             }
-        }
-        .button_show_comment_gifuser {
-            width: 90%;
-            margin: 0 5% 5px 5%;
-        }
-        .button_gifuser_modif {
-            width: 80%;
-            margin: 10px 10%;
-            .button_modifGif {
-                width: 40%;
+            .ul_comment_gifuser {
+                .list_comment_gifuser {
+                    .div_form_comment_gifuser {
+                        width: 80%;
+                        margin: 0 10% 10px 10%;
+                        .form_modif_comment_gifuser {
+                            margin: 10px 0;
+
+                            .input_modif_comment_gifuser {
+                                font-size: 11px;
+                            }
+                            .button_valid_modif_comment_gifuser {
+                                font-size: 11px;
+                            }
+                        }
+                        .button_modif_comment_gifuser {
+                            font-size: 11px;
+                            margin: 0 10% 0 0;
+                        }
+                        .button_supprim_comment_gifuser {
+                            font-size: 11px;
+                        }
+                    }
+                }
             }
-            .button_deleteGif {
-                width: 40%;
+            .button_gifuser_modif {
+                width: 80%;
+                margin: 10px 10%;
+                .button_modifGif {
+                    width: 40%;
+                }
+                .button_deleteGif {
+                    width: 40%;
+                }
             }
         }
     }
@@ -410,6 +568,31 @@ export default {
                 width: 90%;
                 margin: 0 5% 5px 5%;
                 font-size: 18px;
+            }
+            .ul_comment_gifuser {
+                .list_comment_gifuser {
+                    .div_form_comment_gifuser {
+                        width: 80%;
+                        margin: 0 10% 10px 10%;
+                        .form_modif_comment_gifuser {
+                            margin: 10px 0;
+
+                            .input_modif_comment_gifuser {
+                                font-size: 12px;
+                            }
+                            .button_valid_modif_comment_gifuser {
+                                font-size: 12px;
+                            }
+                        }
+                        .button_modif_comment_gifuser {
+                            font-size: 12px;
+                            margin: 0 10% 0 0;
+                        }
+                        .button_supprim_comment_gifuser {
+                            font-size: 12px;
+                        }
+                    }
+                }
             }
             .button_gifuser_modif {
                 width: 80%;
@@ -470,6 +653,31 @@ export default {
                 width: 90%;
                 margin: 0 5% 5px 5%;
                 font-size: 22px;
+            }
+            .ul_comment_gifuser {
+                .list_comment_gifuser {
+                    .div_form_comment_gifuser {
+                        width: 80%;
+                        margin: 0 10% 10px 10%;
+                        .form_modif_comment_gifuser {
+                            margin: 10px 0;
+
+                            .input_modif_comment_gifuser {
+                                font-size: 14px;
+                            }
+                            .button_valid_modif_comment_gifuser {
+                                font-size: 14px;
+                            }
+                        }
+                        .button_modif_comment_gifuser {
+                            font-size: 14px;
+                            margin: 0 10% 0 0;
+                        }
+                        .button_supprim_comment_gifuser {
+                            font-size: 14px;
+                        }
+                    }
+                }
             }
             .button_gifuser_modif {
                 width: 80%;

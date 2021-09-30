@@ -71,15 +71,15 @@ export default {
         async user() {
             const userConnected = await instance
                 .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.id)
-                .catch(() => this.$router.push("/"));
+                .then((resp) => resp.data.id);
+            /* .catch(() => this.$router.push("/"));*/
 
             console.log(userConnected);
             instance
                 .get("http://localhost:3000/auth/" + userConnected)
-                .then((response) => (this.object = response.data))
+                .then((response) => (this.object = response.data));
 
-                .catch(() => this.$router.push("/"));
+            /* .catch(() => this.$router.push("/"));*/
         },
         continu: function() {
             this.display = "block";

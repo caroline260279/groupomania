@@ -48,7 +48,6 @@ export default {
                 .then((resp) => resp.data.email)
                 .catch(() => this.$router.push("/"));
             const user = { email: userConnectedemail, password: this.password };
-            console.log(userConnected);
             const formData = new FormData();
             formData.append("password", this.password);
             instance

@@ -20,6 +20,8 @@ router.put("/comment/modify/:id", auth, commentCtrl.modifyComment);
 router.get("/comment/getOne/:id", auth, commentCtrl.getOneComment);
 //route pour accéder à tous les commentaires, nécessite l'authentification
 router.post("/comment/getAll/:id", auth, commentCtrl.getAllComment);
+//route pour accéder à tous les commentaires, nécessite l'authentification
+router.delete("/comment/delete/:id", auth, commentCtrl.deleteComment);
 
 //exportation du router
 module.exports = router;

@@ -3,7 +3,7 @@
         <ul id="ul_all_gif">
             <li v-for="value in object" v-bind:key="value" class="all_gif">
                 <router-link
-                    v-bind:to="`/user/` + value.user.username"
+                    v-bind:to="`/username/` + value.user.username"
                     class="user_allgif"
                 >
                     <div class="user_allgif">
@@ -52,12 +52,9 @@
                         >
                             <i
                                 class="far fa-heart empty"
-                                v-if="this.heart !== value.id"
+                                v-if="!blue(value)"
                             ></i>
-                            <i
-                                class="fas fa-heart full"
-                                v-if="this.heart === value.id"
-                            ></i>
+                            <i class="fas fa-heart full" v-if="blue(value)"></i>
                         </button>
                         <p class="number_like">{{ value.gif_likes.length }}</p>
                     </div>
@@ -103,12 +100,13 @@
                         </p>
 
                         <p class="p_comment_allgif">{{ valeur.comment }}</p>
+                        {{ valeur.userid }}
                         <div
                             v-if="
-                                valeur.user.id === value.userid ||
-                                    valeur.user.admin === true
+                                valeur.userid === this.userconnect ||
+                                    1 === this.admin
                             "
-                            class="button_comment_allgif"
+                            class="div_form_comment_allgif"
                         >
                             <form
                                 class="form_modif_comment"
@@ -137,7 +135,7 @@
                             ><button
                                 class="button_supprim_comment_allgif"
                                 type="button"
-                                @click="supprimComment(valeur.id)"
+                                @click="supprimComment(valeur.id, value.id)"
                             >
                                 supprimer ce commentaire
                             </button>
@@ -192,8 +190,9 @@ export default {
             ],
             display: "none",
             show: 0,
-            heart: 0,
+            blueheart: 0,
             showmodif: 0,
+            userconnect: 0,
         };
     },
     computed: {
@@ -203,7 +202,9 @@ export default {
     },
     created() {
         this.allGifs();
-        this.blue();
+        this.adminComment();
+        this.adminOrNot();
+        this.userid();
     },
 
     mounted() {},
@@ -264,7 +265,6 @@ export default {
             let like = await instance
                 .get("http://localhost:3000/getOneLike/" + z)
                 .then((resp) => resp.data.jaime);
-            console.log(like);
             if (like != true) {
                 instance.post("http://localhost:3000/like/" + z).then(() => {
                     this.allGifs();
@@ -291,14 +291,53 @@ export default {
                 );
             }
         },
-        supprimComment() {},
-        async blue(h) {
-            let response = await instance
-                .get("http://localhost:3000/getOneLike/" + h)
-                .then((resp) => resp);
+        async adminComment() {
+            let userid = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => resp.data.id);
+            let email = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => resp.data.email);
+            if (email) {
+                this.userconnect = userid;
+            } else {
+                this.userconnect = -userid;
+            }
+        },
+        async adminOrNot() {
+            let admin = await instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => resp.data.admin);
 
-            let heart = await response.data.gifid;
-            return (this.heart = heart);
+            if (admin === true) {
+                this.admin = 1;
+            } else {
+                this.admin = 0;
+            }
+        },
+
+        supprimComment(c, g) {
+            instance
+                .delete("http://localhost:3000/comment/delete/" + c)
+                .then(() => {
+                    this.showcomment(g);
+                })
+                .catch(() => {
+                    console.log("echec");
+                });
+        },
+        userid() {
+            instance
+                .get("http://localhost:3000/auth/user/connected/")
+                .then((resp) => (this.userconnect = resp.data.id));
+        },
+        blue(value) {
+            if (Array.isArray(value.gif_likes)) {
+                return value.gif_likes.some(
+                    (like) => like.userid === this.userconnect
+                );
+            }
+            return false;
         },
     },
 };
@@ -448,7 +487,7 @@ export default {
                 margin: 0 20px 10px 20px;
                 padding: 0;
             }
-            .button_comment_allgif {
+            .div_form_comment_allgif {
                 width: 80%;
                 margin: 0 10% 10px 10%;
                 .form_modif_comment {
@@ -534,7 +573,7 @@ export default {
                 .row2_allgif {
                     font-size: 14px;
                 }
-                .button_comment_allgif {
+                .div_form_comment_gifuser {
                     font-size: 14px;
                     width: 80%;
                     margin: 0 10% 10px 10%;

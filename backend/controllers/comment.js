@@ -86,3 +86,19 @@ exports.getAllComment = async (req, res, next) => {
             });
         });
 };
+//supprimer un commentaire
+exports.deleteComment = (req, res, next) => {
+    model.Gif_comment.findOne({ where: { id: req.params.id } })
+        .then((Gif_comment) => {
+            Gif_comment.destroy({ where: { id: req.params.id } })
+                .then(() =>
+                    res.status(200).json({ message: "commentaire supprimé !" })
+                )
+                .catch((error) => res.status(400).json({ error }));
+        })
+        .catch((error) => {
+            res.status(400).json({
+                error: error,
+            });
+        });
+};

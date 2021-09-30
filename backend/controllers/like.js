@@ -104,13 +104,12 @@ exports.getOneLikeUser = (req, res, next) => {
     const userId = decodedToken.userid;
     model.Gif_like.findOne({
         where: { userid: userId, gifid: req.params.id },
-    })
-        .then((gif_likes) => {
+        include: [model.Gif],
+    }).then((gif_likes) => {
+        if (gif_likes) {
             res.status(200).send(gif_likes.jaime);
-        })
-        .catch((error) => {
-            res.status(400).json({
-                error: error,
-            });
-        });
+        } else {
+            res.status(200).send(false);
+        }
+    });
 };

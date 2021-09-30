@@ -8,6 +8,7 @@ import modifuser from "../views/modifuser.vue";
 import userdelete from "../views/userdelete.vue";
 import modifPassword from "../views/modifpassword.vue";
 import finduser from "../views/user.vue";
+import userpage from "../views/userpage.vue";
 
 const routes = [
     {
@@ -39,6 +40,11 @@ const routes = [
         path: "/user/:id",
         name: "modif_user",
         component: modifuser,
+    },
+    {
+        path: "/username/:username",
+        name: "page_finduser",
+        component: userpage,
     },
     {
         path: "/userdelete",

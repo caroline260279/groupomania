@@ -32,19 +32,17 @@ export default {
     methods: {
         async deleteUser() {
             const emailToCheck = this.email;
+
             let email = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => resp.data.email)
                 .catch(() => console.log("erreur"));
+
             let admin = await instance
                 .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.admin)
-                .catch(() => console.log("erreur"));
+                .then((resp) => resp.data.admin);
             console.log(admin);
-            console.log(emailToCheck);
-            if (email != emailToCheck && (admin = false)) {
-                this.autorisation = 1;
-            } else {
+            if (email != emailToCheck && !(admin = false)) {
                 const user = { email: this.email };
                 instance
                     .delete("http://localhost:3000/auth/delete", {
@@ -52,15 +50,17 @@ export default {
                     })
                     .then(() => {
                         this.$router.push("/");
-                        /*   if ((admin = true)) {
+                        /*  if ((admin = true)) {
                             this.$router.push("/allgifs");
                         } else {
-                           
+
                         }*/
                     })
                     .catch(() => {
                         console.log("l'utilisateur n'a pas été supprimé");
                     });
+            } else {
+                this.autorisation = 1;
             }
         },
 

@@ -143,6 +143,7 @@ exports.findUser = (req, res, next) => {
         })
         .catch((error) => res.status(400).json({ error }));
 };
+
 //revoyer un utilisateur si le jeton est valide
 exports.userConnected = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
@@ -159,6 +160,19 @@ exports.userConnected = (req, res, next) => {
 //Trouver un user avec un clic
 exports.findOneUser = (req, res, next) => {
     model.User.findOne({ where: { id: req.params.id } })
+        .then((users) => {
+            if (!users) {
+                return res.status(401).json({
+                    error: "Utilisateur non trouvé !",
+                });
+            }
+            res.status(200).send(users);
+        })
+        .catch((error) => res.status(400).json({ error }));
+};
+//Trouver un user avec un clic
+exports.findOneUserUsername = (req, res, next) => {
+    model.User.findOne({ where: { username: req.params.username } })
         .then((users) => {
             if (!users) {
                 return res.status(401).json({
