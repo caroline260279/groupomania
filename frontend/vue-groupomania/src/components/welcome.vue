@@ -27,8 +27,8 @@
                     </li>
 
                     <li class="navigation_connected_list">
-                        <router-link to="/finduser" class="menu">
-                            Rechercher un utilisateur</router-link
+                        <a v-on:click="appearFinduser" class="menu">
+                            Rechercher un utilisateur</a
                         >
                     </li>
 
@@ -48,7 +48,7 @@
             action=""
             v-bind:style="{ display: postAppear }"
         >
-            <h1>Qu'avez vous a dire?</h1>
+            <h1>Qu'avez vous à dire?</h1>
             <div class="post_title">
                 <label class="label_title" for="post_title"
                     >Titre* :
@@ -91,6 +91,27 @@
                 </button>
             </div>
         </form>
+        <form id="form_welcome_finduser" v-if="this.finduser === 1">
+            <div class="div_form_finduser">
+                <input
+                    class="input_form_finduser"
+                    type="text"
+                    placeholder="pseudo"
+                    v-model="user"
+                />
+                <button
+                    class="button_form_finduser"
+                    type="button"
+                    @click="search()"
+                >
+                    Rechercher un utilisateur
+                </button>
+            </div>
+            <p class="p_form_finduser" v-if="unknown === 1">
+                Utilisateur inconnu
+            </p>
+            <a class="a_form_finduser" v-on:click="disappearFinduser">Fermer</a>
+        </form>
     </div>
 </template>
 
@@ -105,6 +126,9 @@ export default {
             display: "none",
             title: "",
             selectedFileGif: [],
+            finduser: 0,
+            unknown: 0,
+            user: "",
         };
     },
     computed: {
@@ -119,6 +143,12 @@ export default {
         appearGifWindow: function() {
             this.display = "block";
         },
+        appearFinduser() {
+            return (this.finduser = 1);
+        },
+        disappearFinduser() {
+            return (this.finduser = 0);
+        },
         closeGifWindow: function() {
             this.display = "none";
         },
@@ -132,6 +162,14 @@ export default {
                 .catch(() => {
                     console.log("Oups, votre gif n'a pas pu être publié...");
                 });
+        },
+        async search() {
+            let user = this.user;
+            instance
+                .get("http://localhost:3000/auth/user/" + user)
+                .then(() => this.$router.push("/username/" + user))
+                .then(() => location.reload())
+                .catch(() => (this.unknown = 1));
         },
     },
 };
@@ -291,6 +329,45 @@ export default {
         }
     }
 }
+#form_welcome_finduser {
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 80%;
+    margin: 0 10% 20px 10%;
+    .div_form_finduser {
+        width: 90%;
+        margin: 20px 5% 0 5%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        .input_form_finduser {
+            border: 2px solid black;
+            width: 65%;
+            margin-right: 5%;
+        }
+        .button_form_finduser {
+            width: 30%;
+            background-color: white;
+            border: 2px solid black;
+            box-shadow: 3px 3px black;
+            font-size: 12px;
+            text-align: center;
+        }
+    }
+    .p_form_finduser {
+        text-align: center;
+        width: 100%;
+        color: red;
+        font-size: 12px;
+    }
+    .a_form_finduser {
+        display: block;
+        width: 94%;
+        text-align: right;
+        font-size: 10px;
+        margin: 10px 3% 5px 3%;
+    }
+}
 @media screen and (min-width: 481px) {
     #navigation_connected {
         line-height: 150px;
@@ -319,7 +396,29 @@ export default {
             font-size: 23px;
         }
     }
+    #form_welcome_finduser {
+        width: 70%;
+        margin: 0 15% 20px 15%;
+        .div_form_finduser {
+            width: 90%;
+            margin: 20px 5% 0 5%;
+
+            .input_form_finduser {
+                font-size: 14px;
+            }
+            .button_form_finduser {
+                font-size: 14px;
+            }
+        }
+        .p_form_finduser {
+            font-size: 14px;
+        }
+        .a_form_finduser {
+            font-size: 12px;
+        }
+    }
 }
+
 @media screen and (min-width: 769px) {
     #navigation_connected {
         line-height: 200px;
@@ -370,7 +469,29 @@ export default {
             font-size: 15px;
         }
     }
+    #form_welcome_finduser {
+        width: 60%;
+        margin: 20px 20% 40px 20%;
+        .div_form_finduser {
+            width: 90%;
+            margin: 20px 5% 0 5%;
+
+            .input_form_finduser {
+                font-size: 15px;
+            }
+            .button_form_finduser {
+                font-size: 15px;
+            }
+        }
+        .p_form_finduser {
+            font-size: 15px;
+        }
+        .a_form_finduser {
+            font-size: 12px;
+        }
+    }
 }
+
 @media screen and (min-width: 1280px) {
     #navigation_connected {
         width: 70%;
@@ -410,6 +531,27 @@ export default {
         }
         .button_close_gifwindow {
             font-size: 15px;
+        }
+    }
+    #form_welcome_finduser {
+        width: 50%;
+        margin: 20px 25% 60px 25%;
+        .div_form_finduser {
+            width: 90%;
+            margin: 20px 5% 0 5%;
+
+            .input_form_finduser {
+                font-size: 15px;
+            }
+            .button_form_finduser {
+                font-size: 15px;
+            }
+        }
+        .p_form_finduser {
+            font-size: 15px;
+        }
+        .a_form_finduser {
+            font-size: 12px;
         }
     }
 }

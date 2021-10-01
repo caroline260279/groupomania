@@ -98,7 +98,7 @@ export default {
 #userpage {
     .button_delete_admin_userpage {
         width: 50%;
-        margin: 20px 25% 0 25%;
+        margin: 20px 25% 20px 25%;
         text-align: center;
         background-color: white;
         border: 2px solid black;
