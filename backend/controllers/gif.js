@@ -99,7 +99,7 @@ exports.deleteGif = (req, res, next) => {
         });
 };
 
-//récupération de tous les gifs
+//récupération de tous les gifs avec le username
 exports.getAllGifUser = async (req, res, next) => {
     const userTofind = await model.User.findOne({
         where: { username: req.params.username },

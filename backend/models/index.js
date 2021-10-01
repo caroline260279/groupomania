@@ -1,3 +1,6 @@
+//association des différents models
+//utilisation de cascade pour les suppressions
+
 const User = require("../models/user");
 const Gif = require("../models/gif");
 const Gif_comment = require("../models/gif_comment");

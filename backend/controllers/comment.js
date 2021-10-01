@@ -1,9 +1,9 @@
-//création de la logique métier pour les sauces
+//création de la logique métier pour les commentaires
 
 //importation du package jsonwebtoken
 const jwt = require("jsonwebtoken");
 
-//importation du model de données pour les sauces
+//importation du model de données pour les commentaires
 const model = require("../models/index");
 
 exports.createComment = (req, res, next) => {
@@ -27,6 +27,8 @@ exports.createComment = (req, res, next) => {
             })
         );
 };
+
+//modifier un commentaire
 exports.modifyComment = async (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");

@@ -1,9 +1,9 @@
-//création de la logique métier pour les likes/dislikes
+//création de la logique métier pour les likes
 
 //importation du package jsonwebtoken
 const jwt = require("jsonwebtoken");
 
-//importation du model de données pour les likes/dislikes
+//importation du model de données pour les likes
 const model = require("../models/index");
 
 //récupération du like d'un user pour un un gif

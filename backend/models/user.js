@@ -1,3 +1,4 @@
+//model pour les user
 const Sequelize = require("sequelize");
 const db = require("../config/config");
 
@@ -37,4 +38,5 @@ const Users = db.define("users", {
     },
 });
 
+//exportation du model
 module.exports = Users;

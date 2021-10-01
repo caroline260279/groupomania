@@ -1,3 +1,4 @@
+//model des likes des gifs
 const Sequelize = require("sequelize");
 const db = require("../config/config");
 
@@ -16,4 +17,5 @@ const Gif_likes = db.define("gif_likes", {
     },
 });
 
+//exportation du model
 module.exports = Gif_likes;

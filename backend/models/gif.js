@@ -1,3 +1,4 @@
+//model des gifs
 const Sequelize = require("sequelize");
 const db = require("../config/config");
 
@@ -21,4 +22,5 @@ const Gifs = db.define("gifs", {
     },
 });
 
+//exportation du model
 module.exports = Gifs;

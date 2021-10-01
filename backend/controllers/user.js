@@ -51,71 +51,52 @@ exports.signup = (req, res, next) => {
 
 //création du middelware login
 exports.login = (req, res, next) => {
-    //utilisation de la méthode findOne pour trouver un seul utilisateur (qui est forcément unique)
     model.User.findOne({
-        //l'adresse mail doit correspondre à l'adresse mail de la requête
         where: { email: req.body.email },
     })
-        //renvoie le user
         .then((users) => {
-            //si pas de user alors renvoie "utilisateur non trouvé"
             if (!users) {
                 return res.status(401).json({
                     error: "Utilisateur non trouvé !",
                 });
             }
-            //si un user est trouvé on utilise bcrypt pour comparer le mdp
             bcrypt
-                //compare le mpd du user et le mdp de la requête
                 .compare(req.body.password, users.password)
-                //reception d'un booléen
                 .then((valid) => {
-                    //si mauvais mdp alors "mdp incorrect"
                     if (!valid) {
                         return res.status(401).json({
                             error: "Mot de passe incorrect !",
                         });
                     }
-                    //sinon requête ok
                     res.status(200).json({
-                        //renvoie le userId
                         userid: users.id,
-                        //renvoie un token avec jsonwebtoken
-                        //appel de la fonction sign de jsonwebtoken
-                        //le userId encoder permettra de ne pas pouvoir modifier un objet si on ne l'a pas crée
                         token: jwt.sign(
-                            //les données que l'on souhaite encoder
                             {
                                 userid: users.id,
                             },
-                            //clef secrète d'encodage
                             "RANDOM_TOKEN_SECRET",
-                            //on applique une expiration
                             { expiresIn: "24h" }
                         ),
                     });
                 })
-                //sinon renvoie un probème de connexion
                 .catch((error) =>
                     res.status(500).json({
                         error,
                     })
                 );
         })
-        //sinon renvoie un probème de connexion
         .catch((error) =>
             res.status(500).json({
                 error,
             })
         );
 };
-//suppression de la sauce selectionnée
+
+//suppression du user
 exports.delete = (req, res, next) => {
     model.User.findOne({
-        //l'adresse mail doit correspondre à l'adresse mail de la requête
         where: { email: req.body.email },
     })
-        //renvoie le user
         .then((users) => {
             users
                 .destroy({ userid: users.userid })
@@ -184,12 +165,14 @@ exports.findOneUserUsername = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
 };
 
+//trouver tous les utilisateurs
 exports.findAllUser = (req, res, next) => {
     model.User.findAll()
         .then((users) => res.status(200).send(users))
         .catch((error) => res.status(400).json({ error }));
 };
 
+//modifier un utilisateur
 exports.modify = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");

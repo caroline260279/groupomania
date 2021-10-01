@@ -5,7 +5,7 @@ const express = require("express");
 //création du router express
 const router = express.Router();
 
-//importation de la "logique métier" des sauces (les fonctions)
+//importation de la "logique métier" des gifs
 const gifCtrl = require("../controllers/gif");
 //importation du middelware d'authentification
 const auth = require("../middelware/auth");
