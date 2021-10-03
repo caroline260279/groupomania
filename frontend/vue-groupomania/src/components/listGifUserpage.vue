@@ -52,7 +52,7 @@
                     class="button_show_comment_gifuser"
                     @click="showcomment(value.id)"
                 >
-                    voire les commentaires
+                    voir les commentaires
                 </button>
                 <ul class="ul_comment_gifuser" v-if="value.id === this.show">
                     <!--itération des commentaire pour chaque gif -->
