@@ -1,3 +1,4 @@
+<!--page pour la présentation d'un utilisateur-->
 <template>
     <div><welcome /><userpage /><listGifUserpage /></div>
 </template>

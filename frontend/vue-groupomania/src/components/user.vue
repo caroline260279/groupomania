@@ -1,3 +1,4 @@
+<!--composant pour la présentation de l'utilisateur-->
 <template>
     <div>
         <div class="user_img">
@@ -63,6 +64,7 @@ export default {
         this.user();
     },
     methods: {
+        //récupération de l'utilisateur connecté
         async user() {
             const userConnected = await instance
                 .get("http://localhost:3000/auth/user/connected/")
@@ -81,12 +83,15 @@ export default {
         close: function() {
             this.display = "none";
         },
-        modifUser(x) {
-            this.$router.push("/user/" + x);
+        //envoie à la page de modification du compte
+        modifUser(id) {
+            this.$router.push("/user/" + id);
         },
+        //envoie à la page de suppression de compte
         deleteUser() {
             this.$router.push("/userdelete");
         },
+        //envoie à la page de modification du mot de passe
         modifPassword() {
             this.$router.push("/password");
         },
@@ -112,7 +117,7 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
-        border: 2px solid black;
+        border: 2px solid #224070;
         border-radius: 10px;
         display: none;
         .close_user_bio_two {
@@ -134,14 +139,14 @@ export default {
         width: 120px;
         height: 120px;
         object-fit: cover;
-        border: 2px solid black;
+        border: 2px solid #224070;
         border-radius: 50%;
         margin: 0 50px 0 0;
     }
     .user_username_bio {
         flex: 1;
         .user_username {
-            border-bottom: 2px solid black;
+            border-bottom: 2px solid #224070;
             margin: 0;
             font-size: 25px;
             height: 50px;
@@ -166,22 +171,22 @@ export default {
         width: 30%;
         font-size: 10px;
         background-color: white;
-        border: 2px solid black;
-        box-shadow: 3px 3px black;
+        border: 2px solid #224070;
+        box-shadow: 3px 3px #224070;
     }
     .button_delete_user {
         width: 30%;
         font-size: 10px;
         background-color: white;
-        border: 2px solid black;
-        box-shadow: 3px 3px black;
+        border: 2px solid #224070;
+        box-shadow: 3px 3px #224070;
     }
     .button_modif_password {
         width: 30%;
         font-size: 10px;
         background-color: white;
-        border: 2px solid black;
-        box-shadow: 3px 3px black;
+        border: 2px solid #224070;
+        box-shadow: 3px 3px #224070;
     }
 }
 @media screen and (min-width: 481px) {

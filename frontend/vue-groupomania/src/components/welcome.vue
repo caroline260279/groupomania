@@ -1,9 +1,11 @@
+<!--composant pour le logo, le menu, la création d'un gif et recherche d'un utilisateur-->
 <template>
     <div>
+        <!--logo-->
         <div id="navigation_connected">
             <img
                 class="navigation_connected_image"
-                src="../assets/icon-left-font-monochrome-black.png"
+                src="../assets/logo3.png"
                 alt=""
             />
             <button
@@ -13,6 +15,7 @@
                 <i class="fas fa-bars fa-2x"></i>
                 <i class="fas fa-bars fa-3x"></i>
             </button>
+            <!--menu-->
             <div v-show="showNavigation" class="modal">
                 <ul class="navigation_connected_menu">
                     <li class="navigation_connected_list">
@@ -43,6 +46,7 @@
                 </ul>
             </div>
         </div>
+        <!--création d'un gif-->
         <form
             id="form_welcome"
             action=""
@@ -91,6 +95,7 @@
                 </button>
             </div>
         </form>
+        <!--rechercher un utilisateur-->
         <form id="form_welcome_finduser" v-if="this.finduser === 1">
             <div class="div_form_finduser">
                 <input
@@ -152,6 +157,7 @@ export default {
         closeGifWindow: function() {
             this.display = "none";
         },
+        //valider la création d'un gif
         submitGif() {
             const formData = new FormData();
             formData.append("title", this.title);
@@ -163,6 +169,7 @@ export default {
                     console.log("Oups, votre gif n'a pas pu être publié...");
                 });
         },
+        //rechercher un utilisateur
         async search() {
             let user = this.user;
             instance
@@ -227,7 +234,7 @@ export default {
             content: "";
             width: 45%;
             margin-left: 32.5%;
-            border-bottom: 2px solid black;
+            border-bottom: 2px solid #224070;
             margin-top: 40px 0;
         }
         &::after {
@@ -237,7 +244,7 @@ export default {
             content: "";
             width: 45%;
             margin-left: 32.5%;
-            border-top: 2px solid black;
+            border-top: 2px solid #224070;
             margin-top: 40px 0;
         }
     }
@@ -245,15 +252,21 @@ export default {
         height: 50px;
         vertical-align: middle;
         background-color: white;
-        border: 4px solid black;
+        border: 4px solid #fd2d01;
+        background-color: #d7d7d7;
+        border-radius: 10px;
         margin: 25px 10px;
+        .fa-2x {
+            color: #fd2d01;
+        }
         .fa-3x {
             display: none;
+            color: #fd2d01;
         }
     }
 }
 #form_welcome {
-    border: 2px solid black;
+    border: 2px solid #224070;
     border-radius: 10px;
     display: flex;
     flex-direction: wrap;
@@ -272,14 +285,14 @@ export default {
         width: 80%;
         margin: 0 10% 20px 10%;
         #post_title {
-            border: 2px solid black;
+            border: 2px solid #224070;
             width: 150px;
         }
         .label_title {
             flex-grow: 1;
             position: relative;
             .input_valid_title {
-                color: red;
+                color: #fd2d01;
                 font-size: 10px;
                 position: absolute;
                 top: 10px;
@@ -294,14 +307,14 @@ export default {
         width: 80%;
         margin: 0 10% 20px 10%;
         #post_gif {
-            border: 2px solid black;
+            border: 2px solid #224070;
             width: 150px;
         }
         .label_gif {
             flex-grow: 1;
             position: relative;
             .input_valid_gif {
-                color: red;
+                color: #fd2d01;
                 font-size: 10px;
                 position: absolute;
                 top: 10px;
@@ -318,19 +331,19 @@ export default {
         margin: 0 15% 20px 15%;
         .button_post_gif {
             background-color: white;
-            border: 2px solid black;
-            box-shadow: 3px 3px black;
+            border: 2px solid #224070;
+            box-shadow: 3px 3px #224070;
             margin-right: 5%;
         }
         .button_close_gifwindow {
             background-color: white;
-            border: 2px solid black;
-            box-shadow: 3px 3px black;
+            border: 2px solid #224070;
+            box-shadow: 3px 3px #224070;
         }
     }
 }
 #form_welcome_finduser {
-    border: 2px solid black;
+    border: 2px solid #224070;
     border-radius: 10px;
     width: 80%;
     margin: 0 10% 20px 10%;
@@ -341,15 +354,15 @@ export default {
         flex-direction: row;
         flex-wrap: nowrap;
         .input_form_finduser {
-            border: 2px solid black;
+            border: 2px solid #224070;
             width: 65%;
             margin-right: 5%;
         }
         .button_form_finduser {
             width: 30%;
             background-color: white;
-            border: 2px solid black;
-            box-shadow: 3px 3px black;
+            border: 2px solid #224070;
+            box-shadow: 3px 3px #224070;
             font-size: 12px;
             text-align: center;
         }
@@ -357,7 +370,7 @@ export default {
     .p_form_finduser {
         text-align: center;
         width: 100%;
-        color: red;
+        color: #fd2d01;
         font-size: 12px;
     }
     .a_form_finduser {
@@ -430,6 +443,7 @@ export default {
             margin: 60px 40px;
             .fa-2x {
                 display: none;
+                color: #fd2d01;
             }
             .fa-3x {
                 display: block;

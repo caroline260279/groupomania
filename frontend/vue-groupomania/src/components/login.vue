@@ -1,3 +1,4 @@
+<!--composant page login-->
 <template>
     <div class="classLogin">
         <form action="">
@@ -63,9 +64,11 @@ export default {
         this.submit();
     },
     methods: {
+        //vide le local storage à l'ouverture de la page
         clearStorage() {
             localStorage.removeItem("token");
         },
+        //soumet l'utilisateur
         submit() {
             const user = { email: this.email, password: this.password };
 
@@ -103,7 +106,7 @@ export default {
             content: "";
             width: 40%;
             margin-left: 30%;
-            border-bottom: 2px solid black;
+            border-bottom: 2px solid #224070;
             margin-top: 40px;
             margin-bottom: 40px;
         }
@@ -114,7 +117,7 @@ export default {
             content: "";
             width: 40%;
             margin-left: 30%;
-            border-top: 2px solid black;
+            border-top: 2px solid #224070;
             margin-top: 40px;
             margin-bottom: 40px;
         }
@@ -124,7 +127,7 @@ export default {
     color: red;
     height: 50px;
     text-align: center;
-    border: 2px solid black;
+    border: 2px solid #224070;
     margin: 0 10% 20px 10%;
     position: relative;
     .p_echec_login {
@@ -151,7 +154,7 @@ export default {
     position: relative;
 
     #email {
-        border: 2px solid black;
+        border: 2px solid #224070;
         width: 120px;
     }
     .label_login {
@@ -176,7 +179,7 @@ export default {
     padding-bottom: 40px;
     position: relative;
     #password {
-        border: 2px solid black;
+        border: 2px solid #224070;
         width: 120px;
     }
     .label_login {
@@ -195,8 +198,8 @@ export default {
     width: 30%;
     margin-left: 35%;
     background-color: white;
-    border: 2px solid black;
-    box-shadow: 3px 3px black;
+    border: 2px solid #224070;
+    box-shadow: 3px 3px #224070;
 }
 .inscription_login {
     text-align: center;

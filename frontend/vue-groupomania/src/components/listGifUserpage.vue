@@ -1,6 +1,8 @@
+<!--composant pour la page présentant l'ensemble des gifs d'un utilisateur-->
 <template>
     <div id="lisstGifUserpage">
         <ul id="gifuser">
+            <!--itération de la liste de gifs -->
             <li v-for="value in object" v-bind:key="value" class="list_gifuser">
                 <div class="title_gifuser">{{ value.title }}</div>
                 <div>
@@ -53,6 +55,7 @@
                     voire les commentaires
                 </button>
                 <ul class="ul_comment_gifuser" v-if="value.id === this.show">
+                    <!--itération des commentaire pour chaque gif -->
                     <li
                         class="list_comment_gifuser"
                         v-for="valeur in object.message"
@@ -157,48 +160,51 @@ export default {
         this.listGif();
     },
     methods: {
+        //récupère l'ensemble de ses gifs de l'utilisateur sélectionné
         listGif() {
             let username = this.$route.params.username;
-            console.log(username);
             instance
                 .get("http://localhost:3000/gif/" + username)
                 .then((response) => (this.object = response.data))
                 .catch(() => this.$router.push("/"));
         },
-        createcomment(y) {
+        //commenter un gif
+        createcomment(gif) {
             let comment = { comment: this.comment };
-            console.log(comment);
             instance
-                .post("http://localhost:3000/comment/" + y, comment)
+                .post("http://localhost:3000/comment/" + gif, comment)
                 .then(() => {
                     this.comment = "";
-                    this.showcomment(y);
+                    this.showcomment(gif);
                 })
                 .catch(() =>
                     console.log("le commentaire n'a pas été pris en compte")
                 );
         },
-        showcomment(x) {
+        //afficher les commentaires
+        showcomment(gifid) {
             instance
-                .post("http://localhost:3000/comment/getAll/" + x)
+                .post("http://localhost:3000/comment/getAll/" + gifid)
                 .then((resp) => (this.object.message = resp.data))
                 .then((resp) => {
                     if (resp.length > 0) {
-                        this.show = x;
+                        this.show = gifid;
                     } else {
-                        this.show = -x;
+                        this.show = -gifid;
                     }
                 });
         },
-        modifComment(x) {
-            return (this.showmodif = x);
+        //afficher les boutons de modification des commentaires
+        modifComment(gifid) {
+            return (this.showmodif = gifid);
         },
-        validModifComment(v, g) {
+        //valider les modifications des commentaires
+        validModifComment(commentid, gif) {
             const modif = { comment: this.commentmodif };
             instance
-                .put("http://localhost:3000/comment/modify/" + v, modif)
+                .put("http://localhost:3000/comment/modify/" + commentid, modif)
                 .then(() => {
-                    this.showcomment(g);
+                    this.showcomment(gif);
                     this.commentmodif = "";
                     this.showmodif = 0;
                 })
@@ -206,6 +212,7 @@ export default {
                     console.log("echec");
                 });
         },
+        //supprimer un commentaire
         supprimComment(comment, gif) {
             instance
                 .delete("http://localhost:3000/comment/delete/" + comment)
@@ -216,6 +223,7 @@ export default {
                     console.log("echec");
                 });
         },
+        //renvoie si l'utilisateur connecté est l'administrateur
         async adminOrNot() {
             let admin = await instance
                 .get("http://localhost:3000/auth/user/connected/")
@@ -227,26 +235,31 @@ export default {
                 this.admin = 0;
             }
         },
-        async like(z) {
+        //liker le gif
+        async like(gifid) {
             let like = await instance
-                .get("http://localhost:3000/getOneLike/" + z)
+                .get("http://localhost:3000/getOneLike/" + gifid)
                 .then((resp) => resp.data.jaime);
             if (like != true) {
-                instance.post("http://localhost:3000/like/" + z).then(() => {
-                    this.heart = z;
-                    this.listGif();
-                });
+                instance
+                    .post("http://localhost:3000/like/" + gifid)
+                    .then(() => {
+                        this.heart = gifid;
+                        this.listGif();
+                    });
             } else {
                 instance
-                    .delete("http://localhost:3000/like/delete/" + z)
+                    .delete("http://localhost:3000/like/delete/" + gifid)
                     .then(() => this.listGif());
             }
         },
+        //renvoie le userid de l'utilisateur connecté
         userid() {
             instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => (this.userconnect = resp.data.id));
         },
+        //colore en bleu le coeur si l'utilisateur connecté a liké le gif
         blue(value) {
             if (Array.isArray(value.gif_likes)) {
                 return value.gif_likes.some(

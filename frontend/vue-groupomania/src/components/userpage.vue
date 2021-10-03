@@ -1,3 +1,4 @@
+<!--composant pour la présentation d'un utilisateur-->
 <template>
     <div id="userpage">
         <div class="user_img">
@@ -18,6 +19,7 @@
                 </div>
             </div>
         </div>
+        <!--affichage d'un bouton pour supprimer l'utilisateur si l'utilisateur connecté est administrateur-->
         <button
             v-if="this.admin === true"
             class="button_delete_admin_userpage"
@@ -51,6 +53,7 @@ export default {
         this.admintodelete();
     },
     methods: {
+        //récupération de l'utilisateur
         async user() {
             let user = this.$route.params.username;
             instance
@@ -65,14 +68,13 @@ export default {
         close: function() {
             this.display = "none";
         },
+        //suppression de l'utilisateur
         async supprim() {
             let user = this.$route.params.username;
             let emailUserDelete = await instance
                 .get("http://localhost:3000/auth/user/" + user)
                 .then((response) => response.data.email);
-            console.log(emailUserDelete);
             const useremail = { email: emailUserDelete };
-            console.log(useremail);
             instance
                 .delete("http://localhost:3000/auth/delete", {
                     data: useremail,
@@ -84,6 +86,7 @@ export default {
                     console.log("l'utilisateur n'a pas été supprimé");
                 });
         },
+        //renvoie si l'utilisateur connecté est administrateur
         admintodelete() {
             instance
                 .get("http://localhost:3000/auth/user/connected/")
@@ -101,8 +104,8 @@ export default {
         margin: 20px 25% 20px 25%;
         text-align: center;
         background-color: white;
-        border: 2px solid black;
-        box-shadow: 3px 3px black;
+        border: 2px solid #224070;
+        box-shadow: 3px 3px #224070;
     }
 }
 </style>

@@ -1,3 +1,4 @@
+<!--page acceuil-->
 <template>
     <div><welcome /><allgifs /></div>
 </template>

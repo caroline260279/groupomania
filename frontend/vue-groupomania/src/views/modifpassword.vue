@@ -1,3 +1,4 @@
+<!--page pour la modification du mot de passe-->
 <template>
     <div><welcome /><modifpassword /></div>
 </template>

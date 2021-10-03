@@ -1,3 +1,4 @@
+<!--composant pour la modification de l'utilisateur-->
 <template>
     <div id="user">
         <form class="modif_account">
@@ -82,9 +83,11 @@ export default {
     },
 
     methods: {
+        //selection du fichier pour la modification de la photo de profil
         onFileSelectedModifUser(event) {
             this.selectedFileModifUser = event.target.files[0];
         },
+        //récupération de l'utilisateur à modifier (préremplissage des inputs)
         async user() {
             const userConnected = await instance
                 .get("http://localhost:3000/auth/user/connected/")
@@ -100,14 +103,12 @@ export default {
         close: function() {
             this.display = "none";
         },
+        //validation des modifications
         async validModifUser() {
             let user = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => resp.data.id);
-            console.log(user);
             const formData = new FormData();
-            let username1 = this.object.username;
-            console.log(username1);
             formData.append("username", this.object.username);
             formData.append("bio", this.object.bio);
             formData.append("email", this.object.email);
@@ -119,14 +120,13 @@ export default {
                     this.display = "block";
                 });
         },
+        //vérification que l'utilisateur connecté est l'utilisateur à modifier
         async verif() {
             let id = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => resp.data.id)
                 .catch(() => console.log("erreur"));
             let idparams = this.$route.params.id;
-            console.log(id);
-            console.log(idparams);
             if (idparams != id) {
                 this.$router.push("/allgifs");
             } else {
@@ -139,7 +139,7 @@ export default {
 
 <style lang="scss">
 .modif_account {
-    border: 2px solid black;
+    border: 2px solid #224070;
     width: 90%;
     margin: 0 5% 20px 5%;
     border-radius: 10px;
@@ -153,15 +153,15 @@ export default {
         }
         .input_modif {
             width: 120px;
-            border: 2px solid black;
+            border: 2px solid #224070;
         }
     }
     .button_valid_modif {
         width: 50%;
         margin: 20px 25%;
         background-color: white;
-        border: 2px solid black;
-        box-shadow: 3px 3px black;
+        border: 2px solid #224070;
+        box-shadow: 3px 3px #224070;
     }
     .p_echec_modif {
         width: 80%;

@@ -1,3 +1,4 @@
+<!--page pour la suppression d'un utilisateur-->
 <template>
     <div><welcome /><userdelete /></div>
 </template>

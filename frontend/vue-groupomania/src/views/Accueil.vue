@@ -1,8 +1,8 @@
+<!--page login-->
 <template>
     <div><logo /><login /></div>
 </template>
 <script>
-// @ is an alias to /src
 import Login from "../components/login.vue";
 import Logo from "../components/logo.vue";
 

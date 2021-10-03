@@ -1,3 +1,4 @@
+<!--composant pour la modification d'un gif-->
 <template>
     <div id="gifToModif">
         <div class="gifToModif">
@@ -59,9 +60,11 @@ export default {
         this.nogif();
     },
     methods: {
+        //selection du fichier
         onFileSelected(event) {
             this.selectedFile = event.target.files[0];
         },
+        //affichage du gif à modifier
         gifModif() {
             let gifIdToModif = this.$route.params.id;
             instance
@@ -69,6 +72,7 @@ export default {
                 .then((response) => (this.object = response.data))
                 .catch(() => this.$router.push("/"));
         },
+        //suppression du gif
         deleteGif() {
             let gif = this.$route.params.id;
             instance
@@ -78,10 +82,10 @@ export default {
                     console.log("echec");
                 });
         },
+        //mise à jour du gif
         updateGif() {
             let gifIdToModif = this.$route.params.id;
             const formData = new FormData();
-            console.log(this.title === "");
             if (!(this.title === "")) {
                 formData.append("title", this.title);
                 formData.append("image", this.selectedFile);
@@ -107,6 +111,7 @@ export default {
                     });
             }
         },
+        //redirection aprés suppression du gif selon admin ou non
         async verif() {
             let gifIdToModif = this.$route.params.id;
 
@@ -131,6 +136,7 @@ export default {
         closefModif() {
             this.$router.push("/welcome");
         },
+        //redirection si le gif n'existe pas
         async nogif() {
             let gif = this.$route.params.id;
             let gifexist = await instance
@@ -148,10 +154,11 @@ export default {
 <style lang="scss">
 .gifToModif {
     list-style-type: none;
-    border: 2px solid black;
+    border: 2px solid #224070;
     border-radius: 10px;
     width: 70%;
     margin: 0 15% 20px 15%;
+    background-color: white;
 
     .title_gifToModif {
         font-size: 25px;
@@ -163,12 +170,14 @@ export default {
         margin: 0 5% 20px 5%;
         height: 200px;
         object-fit: cover;
+        border: 2px solid #224070;
+        border-radius: 10px;
     }
 }
 .form_modif {
     width: 90%;
     margin: 0 5%;
-    border: 2px solid black;
+    border: 2px solid #224070;
     border-radius: 10px;
     .h1_gifToModif {
         margin: 20px 10%;
@@ -187,7 +196,7 @@ export default {
             font-size: 20px;
         }
         #title_gifToModif {
-            border: 2px solid black;
+            border: 2px solid #224070;
             width: 200px;
         }
     }
@@ -203,7 +212,7 @@ export default {
             font-size: 20px;
         }
         #file_gifToModif {
-            border: 2px solid black;
+            border: 2px solid #224070;
             width: 200px;
         }
     }
@@ -216,8 +225,8 @@ export default {
         justify-content: space-between;
         .button_post_gif {
             background-color: white;
-            border: 2px solid black;
-            box-shadow: 3px 3px black;
+            border: 2px solid #224070;
+            box-shadow: 3px 3px #224070;
             margin-right: 5%;
             font-size: 12px;
             width: 50%;
@@ -225,8 +234,8 @@ export default {
         .button_close_gifwindow {
             width: 50%;
             background-color: white;
-            border: 2px solid black;
-            box-shadow: 3px 3px black;
+            border: 2px solid #224070;
+            box-shadow: 3px 3px #224070;
             font-size: 12px;
         }
     }

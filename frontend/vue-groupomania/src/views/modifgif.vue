@@ -1,3 +1,4 @@
+<!--page pour la modification d'un gif-->
 <template>
     <div><welcome /><modif /></div>
 </template>

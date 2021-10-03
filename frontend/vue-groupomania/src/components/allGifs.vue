@@ -1,6 +1,8 @@
+<!--composant pour la page présentant l'ensemble des gifs des utilisateurs-->
 <template>
     <div id="allGif">
         <ul id="ul_all_gif">
+            <!--itération de la liste de gifs -->
             <li v-for="value in object" v-bind:key="value" class="all_gif">
                 <router-link
                     v-bind:to="`/username/` + value.user.username"
@@ -87,6 +89,7 @@
                     :id="`gifuser` + value.id"
                     v-if="value.id === this.show"
                 >
+                    <!--itération des commentaire pour chaque gif -->
                     <li
                         class="list_comment_allgif"
                         v-for="valeur in object.message"
@@ -209,48 +212,50 @@ export default {
 
     mounted() {},
     methods: {
+        //récupération de tous les gifs
         allGifs() {
             instance
                 .post("http://localhost:3000/gif")
                 .then((response) => (this.object = response.data))
                 .catch(() => this.$router.push("/"));
         },
-
-        createcomment(y) {
+        //créer un commentaire
+        createcomment(gif) {
             let comment = { comment: this.comment };
-            console.log(comment);
             instance
-                .post("http://localhost:3000/comment/" + y, comment)
+                .post("http://localhost:3000/comment/" + gif, comment)
                 .then(() => {
                     this.comment = "";
-                    this.showcomment(y);
+                    this.showcomment(gif);
                 })
                 .catch(() =>
                     console.log("le commentaire n'a pas été pris en compte")
                 );
         },
-        showcomment(x) {
-            console.log(this.show);
+        //montrer les commentaires
+        showcomment(gifid) {
             instance
-                .post("http://localhost:3000/comment/getAll/" + x)
+                .post("http://localhost:3000/comment/getAll/" + gifid)
                 .then((resp) => (this.object.message = resp.data))
                 .then((resp) => {
                     if (resp.length > 0) {
-                        this.show = x;
+                        this.show = gifid;
                     } else {
-                        this.show = -x;
+                        this.show = -gifid;
                     }
                 });
         },
-        modifComment(x) {
-            return (this.showmodif = x);
+        //afficher les boutons de modification des commentaires
+        modifComment(gifid) {
+            return (this.showmodif = gifid);
         },
-        validModifComment(v, g) {
+        //valider les modifications des commentaires
+        validModifComment(commentid, gif) {
             const modif = { comment: this.commentmodif };
             instance
-                .put("http://localhost:3000/comment/modify/" + v, modif)
+                .put("http://localhost:3000/comment/modify/" + commentid, modif)
                 .then(() => {
-                    this.showcomment(g);
+                    this.showcomment(gif);
                     this.commentmodif = "";
                     this.showmodif = 0;
                 })
@@ -261,36 +266,41 @@ export default {
         close: function() {
             this.display = "none";
         },
-        async like(z) {
+        //liker le gif
+        async like(gifid) {
             let like = await instance
-                .get("http://localhost:3000/getOneLike/" + z)
+                .get("http://localhost:3000/getOneLike/" + gifid)
                 .then((resp) => resp.data.jaime);
             if (like != true) {
-                instance.post("http://localhost:3000/like/" + z).then(() => {
-                    this.allGifs();
-                });
+                instance
+                    .post("http://localhost:3000/like/" + gifid)
+                    .then(() => {
+                        this.allGifs();
+                    });
             } else {
                 instance
-                    .delete("http://localhost:3000/like/delete/" + z)
+                    .delete("http://localhost:3000/like/delete/" + gifid)
                     .then(() => {
                         this.allGifs();
                     });
             }
         },
-        async linkadmin(g) {
+        //lien administrateur pour supprimer un gif
+        async linkadmin(gifid) {
             let admin = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => resp.data.admin)
                 .catch(() => console.log("erreur"));
 
             if (admin === true) {
-                this.$router.push("/gif/" + g);
+                this.$router.push("/gif/" + gifid);
             } else {
                 console.log(
                     "ce lien ne fonctionne que pour les administrateurs"
                 );
             }
         },
+        //permettre a l'administrateur de supprimer un commentaire
         async adminComment() {
             let userid = await instance
                 .get("http://localhost:3000/auth/user/connected/")
@@ -304,6 +314,7 @@ export default {
                 this.userconnect = -userid;
             }
         },
+        //renvoie si l'utilisateur connecté est l'administrateur
         async adminOrNot() {
             let admin = await instance
                 .get("http://localhost:3000/auth/user/connected/")
@@ -315,22 +326,24 @@ export default {
                 this.admin = 0;
             }
         },
-
-        supprimComment(c, g) {
+        //supprimer un commentaire
+        supprimComment(commentid, gifid) {
             instance
-                .delete("http://localhost:3000/comment/delete/" + c)
+                .delete("http://localhost:3000/comment/delete/" + commentid)
                 .then(() => {
-                    this.showcomment(g);
+                    this.showcomment(gifid);
                 })
                 .catch(() => {
                     console.log("echec");
                 });
         },
+        //renvoie le userid de l'utilisateur connecté
         userid() {
             instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => (this.userconnect = resp.data.id));
         },
+        //colore en bleu le coeur si l'utilisateur connecté a liké le gif
         blue(value) {
             if (Array.isArray(value.gif_likes)) {
                 return value.gif_likes.some(
@@ -344,29 +357,37 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+    background-color: #d7d7d7;
+}
 #allGif {
     width: 80%;
     margin: 0 10%;
+    color: 224070;
+    background-color: #d7d7d7;
     #ul_all_gif {
         list-style-type: none;
         margin: 0;
         padding: 0;
         .all_gif {
-            border: 2px solid black;
+            border: 2px solid #224070;
             border-radius: 10px;
             margin: 0 0 20px 0;
+            background-color: white;
+
             .user_allgif {
                 display: flex;
                 flex-direction: row;
                 flex-wrap: nowrap;
                 text-decoration: none;
                 color: black;
+
                 .photo_user_allgif {
                     width: 50px;
                     margin: 20px 20px 0 20px;
                     object-fit: cover;
                     object-position: 50% 50%;
-                    border: 2px solid black;
+                    border: 2px solid #224070;
                     border-radius: 10px;
                 }
                 .username_allgif {
@@ -406,6 +427,8 @@ export default {
                 margin: 0 5%;
                 height: 200px;
                 object-fit: cover;
+                border: 2px solid #224070;
+                border-radius: 10px;
             }
             .row1_allgif {
                 width: 90%;
@@ -415,6 +438,7 @@ export default {
                 flex-wrap: nowrap;
                 justify-content: space-between;
                 font-size: 12px;
+
                 .like_allgif {
                     margin: 0;
                     display: flex;
@@ -430,7 +454,7 @@ export default {
                             color: black;
                         }
                         .full {
-                            color: blue;
+                            color: #224070;
                         }
                     }
                     .number_like {
@@ -448,7 +472,7 @@ export default {
                 #comment_allgif {
                     width: 60%;
                     margin-right: 5%;
-                    border: 2px solid black;
+                    border: 2px solid #224070;
                 }
                 .button_comment_allgif {
                     flex-grow: 1;
@@ -456,8 +480,8 @@ export default {
                     font-size: 12px;
                     padding: 0;
                     background-color: white;
-                    border: 2px solid black;
-                    box-shadow: 3px 3px black;
+                    border: 2px solid #224070;
+                    box-shadow: 3px 3px #224070;
                 }
             }
         }
@@ -476,6 +500,7 @@ export default {
             margin: 0;
             padding: 0;
             list-style-type: disc;
+
             .p_user_comment_allgif {
                 margin: 0;
                 padding: 0;
@@ -498,7 +523,7 @@ export default {
                     flex-wrap: nowrap;
                     .input_modif_comment {
                         width: 65%;
-                        border: 2px solid black;
+                        border: 2px solid #224070;
                         font-size: 10px;
                         margin-right: 5%;
                     }
@@ -506,8 +531,8 @@ export default {
                         font-size: 10px;
                         width: 30%;
                         background-color: white;
-                        border: 2px solid black;
-                        box-shadow: 3px 3px black;
+                        border: 2px solid #224070;
+                        box-shadow: 3px 3px #224070;
                     }
                 }
                 .button_modif_comment_allgif {
@@ -515,15 +540,15 @@ export default {
                     font-size: 10px;
                     margin: 0 10% 0 0;
                     background-color: white;
-                    border: 2px solid black;
-                    box-shadow: 3px 3px black;
+                    border: 2px solid #224070;
+                    box-shadow: 3px 3px #224070;
                 }
                 .button_supprim_comment_allgif {
                     width: 45%;
                     font-size: 10px;
                     background-color: white;
-                    border: 2px solid black;
-                    box-shadow: 3px 3px black;
+                    border: 2px solid #224070;
+                    box-shadow: 3px 3px #224070;
                 }
             }
         }

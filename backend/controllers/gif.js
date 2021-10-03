@@ -14,7 +14,6 @@ exports.createGif = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;
-    console.log(req.body.userid && req.body.userid !== userId);
     model.Gif.create({
         userid: userId,
         title: req.body.title,

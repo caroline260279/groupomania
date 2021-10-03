@@ -1,3 +1,4 @@
+<!--page pour la création d'un utilisateur-->
 <template>
     <div><logo /><signup /></div>
 </template>

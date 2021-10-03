@@ -1,3 +1,5 @@
+<!--logo page login et signup-->
+
 <script>
 export default {
     name: "Logo",
@@ -6,7 +8,7 @@ export default {
 
 <template>
     <div class="logo">
-        <img src="../assets/icon-left-font-monochrome-black.png" alt="" />
+        <img src="../assets/logo3.png" alt="" />
         <div class="p_logo">
             <p class="welcome_logo">
                 Bienvenue sur le réseau social interne du groupe

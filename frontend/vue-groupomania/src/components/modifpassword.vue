@@ -1,3 +1,4 @@
+<!--composant pour la modification du mot de passe-->
 <template>
     <div id="delete_user">
         <form class="mdp_modif" action="">
@@ -38,6 +39,7 @@ export default {
         this.connect();
     },
     methods: {
+        //modification du mot de passe
         async submit() {
             const userConnected = await instance
                 .get("http://localhost:3000/auth/user/connected/")
@@ -64,6 +66,7 @@ export default {
                         .then(() => (this.display = "block"))
                 );
         },
+        //redirection si aucun token n'est dans le local storage
         connect() {
             instance
                 .get("http://localhost:3000/auth/user/connected/")
@@ -94,8 +97,8 @@ export default {
             margin: 0 25%;
             text-align: center;
             background-color: white;
-            border: 2px solid black;
-            box-shadow: 3px 3px black;
+            border: 2px solid #224070;
+            box-shadow: 3px 3px #224070;
         }
     }
     .link_modif_password {

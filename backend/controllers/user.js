@@ -10,7 +10,6 @@ const jwt = require("jsonwebtoken");
 
 //création du middelware signup
 exports.signup = (req, res, next) => {
-    console.log(req.body);
     //hachage du mdp avec 10 tours de l'algorithme
     bcrypt
         .hash(req.body.password, 10)
@@ -177,7 +176,6 @@ exports.modify = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;
-    console.log(userId != req.params.id);
     if (userId != req.params.id) {
         return res.status(401).json({
             error: "Vous n'êtes pas autorisé à modifier cette utilisateur !",

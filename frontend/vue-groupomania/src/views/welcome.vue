@@ -1,3 +1,4 @@
+<!--page "mon compte"-->
 <template>
     <div><welcome /><user /><gifuser /></div>
 </template>

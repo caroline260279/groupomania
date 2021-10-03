@@ -1,3 +1,4 @@
+<!--composant pour la création d'un utilisateur-->
 <template>
     <form id="classSignup">
         <div class="firstname_signup">
@@ -130,12 +131,15 @@ export default {
     },
 
     methods: {
+        //selection du fichier photo de profil
         onFileSelected(event) {
             this.selectedFile = event.target.files[0];
         },
+        //vide le local storage au chargement de la page
         clearStorage() {
             localStorage.removeItem("token");
         },
+        //création du compte
         async createUser() {
             const formData = new FormData();
             formData.append("firstname", this.firstname);
@@ -153,9 +157,7 @@ export default {
                         .post("http://localhost:3000/auth/login", user)
                         .then((response) => response.data)
                         .then((data) => {
-                            console.log(data.userid);
                             if (data.userid > 0) {
-                                console.log(data.token);
                                 localStorage.setItem("token", data.token);
                                 this.$router.push("/welcome");
                             }
@@ -184,7 +186,7 @@ export default {
         width: 40%;
         margin-left: 30%;
         padding-top: 60px;
-        border-top: 2px solid black;
+        border-top: 2px solid #224070;
     }
 
     .firstname_signup {
@@ -194,7 +196,7 @@ export default {
         margin: auto;
         padding-bottom: 20px;
         .input_signup {
-            border: 2px solid black;
+            border: 2px solid #224070;
             width: 120px;
             font-size: 15px;
         }
@@ -215,7 +217,7 @@ export default {
         color: red;
         height: 50px;
         text-align: center;
-        border: 2px solid black;
+        border: 2px solid #224070;
         margin: 20px 10% 20px 10%;
         position: relative;
         .p_echec_signup {
@@ -236,9 +238,9 @@ export default {
         width: 30%;
         margin-left: 35%;
         background-color: white;
-        border: 2px solid black;
+        border: 2px solid #224070;
         margin-top: 20px;
-        box-shadow: 3px 3px black;
+        box-shadow: 3px 3px #224070;
     }
 }
 

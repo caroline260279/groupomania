@@ -72,7 +72,6 @@ exports.getAllComment = async (req, res, next) => {
     const gifTofind = await model.Gif.findOne({
         where: { id: req.params.id },
     });
-    console.log(gifTofind);
     gifId = gifTofind.id;
     model.Gif_comment.findAll({
         where: { gifid: gifId },
