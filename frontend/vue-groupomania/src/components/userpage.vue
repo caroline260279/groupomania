@@ -80,7 +80,7 @@ export default {
                     data: useremail,
                 })
                 .then(() => {
-                    this.$router.push("/");
+                    this.$router.push("/welcome");
                 })
                 .catch(() => {
                     console.log("l'utilisateur n'a pas été supprimé");
