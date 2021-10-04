@@ -266,10 +266,12 @@ export default {
         },
         //liker le gif
         async like(gifid) {
-            const like = await instance
-                .get("http://localhost:3000/getOneLike/" + gifid)
-                .then((resp) => resp.data.jaime);
-            if (like != true) {
+            const like = await instance.get(
+                "http://localhost:3000/getOneLike/" + gifid
+            );
+
+            const likeTwo = like.data.jaime;
+            if (likeTwo != true) {
                 instance
                     .post("http://localhost:3000/like/" + gifid)
                     .then(() => {

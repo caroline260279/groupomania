@@ -225,11 +225,12 @@ export default {
         },
         //renvoie si l'utilisateur connecté est l'administrateur
         async adminOrNot() {
-            const admin = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.admin);
+            const admin = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
 
-            if (admin === true) {
+            const adminTwo = admin.data.admin;
+            if (adminTwo === true) {
                 this.admin = 1;
             } else {
                 this.admin = 0;
@@ -237,10 +238,12 @@ export default {
         },
         //liker le gif
         async like(gifid) {
-            const like = await instance
-                .get("http://localhost:3000/getOneLike/" + gifid)
-                .then((resp) => resp.data.jaime);
-            if (like != true) {
+            const like = await instance.get(
+                "http://localhost:3000/getOneLike/" + gifid
+            );
+
+            const likeTwo = like.data.jaime;
+            if (likeTwo != true) {
                 instance
                     .post("http://localhost:3000/like/" + gifid)
                     .then(() => {

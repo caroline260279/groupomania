@@ -115,19 +115,23 @@ export default {
         async verif() {
             const gifIdToModif = this.$route.params.id;
 
-            const userid = await instance
-                .get("http://localhost:3000/" + gifIdToModif)
-                .then((response) => response.data.userid);
+            const userid = await instance.get(
+                "http://localhost:3000/" + gifIdToModif
+            );
 
-            const useridFromToken = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((response) => response.data.id);
+            const useridTwo = userid.data.userid;
 
-            const caro = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((response) => response.data.admin);
+            const useridFromToken = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
 
-            if (caro != true && userid != useridFromToken) {
+            const useridFromTokenTwo = useridFromToken.data.id;
+            const admin = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
+
+            const adminTwo = admin.data.admin;
+            if (adminTwo != true && useridTwo != useridFromTokenTwo) {
                 this.$router.push("/allgifs");
             } else {
                 console.log("vous n'avez pas à etre redirigé");
@@ -139,10 +143,10 @@ export default {
         //redirection si le gif n'existe pas
         async nogif() {
             const gif = this.$route.params.id;
-            const gifexist = await instance
-                .get("http://localhost:3000/" + gif)
-                .then((response) => response.data.id);
-            if (gifexist > 0) {
+            const gifexist = await instance.get("http://localhost:3000/" + gif);
+
+            const gifexistTwo = gifexist.data.id;
+            if (gifexistTwo > 0) {
                 console.log("vous n'avez pas à etre redirigé");
             } else {
                 this.$router.push("/allgifs");
