@@ -26,12 +26,12 @@ export default {
     methods: {
         //suppression de l'utilisateur
         async deleteUser() {
-            const emailUserDelete = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.email)
-                .catch(() => console.log("erreur"));
+            const emailUserDelete = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
 
-            const user = { email: emailUserDelete };
+            const emailUserDeleteTwo = emailUserDelete.data.email;
+            const user = { email: emailUserDeleteTwo };
             instance
                 .delete("http://localhost:3000/auth/delete", {
                     data: user,

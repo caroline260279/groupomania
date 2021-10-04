@@ -140,7 +140,7 @@ export default {
             localStorage.removeItem("token");
         },
         //création du compte
-        async createUser() {
+        createUser() {
             const formData = new FormData();
             formData.append("firstname", this.firstname);
             formData.append("name", this.name);

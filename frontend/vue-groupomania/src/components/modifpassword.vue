@@ -41,20 +41,27 @@ export default {
     methods: {
         //modification du mot de passe
         async submit() {
-            const userConnected = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.id)
-                .catch(() => this.$router.push("/"));
-            const userConnectedemail = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.email)
-                .catch(() => this.$router.push("/"));
-            const user = { email: userConnectedemail, password: this.password };
+            const userConnected = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
+
+            const userConnectedTwo = userConnected.data.id;
+
+            const userConnectedemail = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
+
+            const userConnectedemailTwo = userConnectedemail.data.email;
+
+            const user = {
+                email: userConnectedemailTwo,
+                password: this.password,
+            };
             const formData = new FormData();
             formData.append("password", this.password);
             instance
                 .put(
-                    "http://localhost:3000/auth/modify/Pw/" + userConnected,
+                    "http://localhost:3000/auth/modify/Pw/" + userConnectedTwo,
                     formData
                 )
                 .then(

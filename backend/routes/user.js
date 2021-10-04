@@ -28,7 +28,7 @@ const validPassword = require("../middelware/password");
 //création des routes avec les différents endpoints de l'application
 
 //route pour l'inscription
-router.post("/signup", validPassword, multer, userCtrl.signup);
+router.post("/signup", multer, userCtrl.signup);
 //route pour se loguer
 router.post("/login", limiter, userCtrl.login);
 //route de suppression de compte
