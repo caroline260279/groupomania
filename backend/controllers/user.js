@@ -9,7 +9,7 @@ const model = require("../models/index");
 const jwt = require("jsonwebtoken");
 
 //création du middelware signup
-exports.signup = (req, res, next) => {
+exports.signup = (req, res) => {
     //hachage du mdp avec 10 tours de l'algorithme
     bcrypt
         .hash(req.body.password, 10)
@@ -49,7 +49,7 @@ exports.signup = (req, res, next) => {
 };
 
 //création du middelware login
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
     model.User.findOne({
         where: { email: req.body.email },
     })
@@ -92,7 +92,7 @@ exports.login = (req, res, next) => {
 };
 
 //suppression du user
-exports.delete = (req, res, next) => {
+exports.delete = (req, res) => {
     model.User.findOne({
         where: { email: req.body.email },
     })
@@ -111,7 +111,7 @@ exports.delete = (req, res, next) => {
 };
 
 //Trouver un user avec un username
-exports.findUser = (req, res, next) => {
+exports.findUser = (req, res) => {
     model.User.findOne({ where: { username: req.body.username } })
         .then((users) => {
             if (!users) {
@@ -124,8 +124,8 @@ exports.findUser = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
 };
 
-//revoyer un utilisateur si le jeton est valide
-exports.userConnected = (req, res, next) => {
+//renvoyer un utilisateur si le jeton est valide
+exports.userConnected = (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;
@@ -138,7 +138,7 @@ exports.userConnected = (req, res, next) => {
 };
 
 //Trouver un user avec un clic
-exports.findOneUser = (req, res, next) => {
+exports.findOneUser = (req, res) => {
     model.User.findOne({ where: { id: req.params.id } })
         .then((users) => {
             if (!users) {
@@ -151,7 +151,7 @@ exports.findOneUser = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
 };
 //Trouver un user avec un clic
-exports.findOneUserUsername = (req, res, next) => {
+exports.findOneUserUsername = (req, res) => {
     model.User.findOne({ where: { username: req.params.username } })
         .then((users) => {
             if (!users) {
@@ -165,14 +165,14 @@ exports.findOneUserUsername = (req, res, next) => {
 };
 
 //trouver tous les utilisateurs
-exports.findAllUser = (req, res, next) => {
+exports.findAllUser = (req, res) => {
     model.User.findAll()
         .then((users) => res.status(200).send(users))
         .catch((error) => res.status(400).json({ error }));
 };
 
 //modifier un utilisateur
-exports.modify = (req, res, next) => {
+exports.modify = (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;
@@ -205,7 +205,7 @@ exports.modify = (req, res, next) => {
     }
 };
 //modification du mot de passe
-exports.updatePw = (req, res, next) => {
+exports.updatePw = (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;

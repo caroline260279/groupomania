@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 //importation du model de données pour les commentaires
 const model = require("../models/index");
 
-exports.createComment = (req, res, next) => {
+exports.createComment = (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;
@@ -29,7 +29,7 @@ exports.createComment = (req, res, next) => {
 };
 
 //modifier un commentaire
-exports.modifyComment = async (req, res, next) => {
+exports.modifyComment = async (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;
@@ -61,14 +61,14 @@ exports.modifyComment = async (req, res, next) => {
     }
 };
 //accéder aux informations d'un commentaire en particulier
-exports.getOneComment = (req, res, next) => {
+exports.getOneComment = (req, res) => {
     model.Gif_comment.findOne({ where: { id: req.params.id } })
         .then((Gif_comment) => res.status(200).send(Gif_comment))
         .catch((error) => res.status(400).json({ error }));
 };
 
 //accéder à tous les commentaires
-exports.getAllComment = async (req, res, next) => {
+exports.getAllComment = async (req, res) => {
     const gifTofind = await model.Gif.findOne({
         where: { id: req.params.id },
     });
@@ -88,7 +88,7 @@ exports.getAllComment = async (req, res, next) => {
         });
 };
 //supprimer un commentaire
-exports.deleteComment = (req, res, next) => {
+exports.deleteComment = (req, res) => {
     model.Gif_comment.findOne({ where: { id: req.params.id } })
         .then((Gif_comment) => {
             Gif_comment.destroy({ where: { id: req.params.id } })

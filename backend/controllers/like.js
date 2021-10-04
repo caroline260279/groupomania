@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const model = require("../models/index");
 
 //récupération du like d'un user pour un un gif
-exports.getOneLike = (req, res, next) => {
+exports.getOneLike = (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;
@@ -24,7 +24,7 @@ exports.getOneLike = (req, res, next) => {
         });
 };
 //récupération de tous les likes pour un gif
-exports.getAllLike = (req, res, next) => {
+exports.getAllLike = (req, res) => {
     model.Gif_like.findAll({
         where: { gifid: req.params.id },
     })
@@ -39,7 +39,7 @@ exports.getAllLike = (req, res, next) => {
 };
 
 //création du like
-exports.createLike = async (req, res, next) => {
+exports.createLike = async (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;
@@ -61,7 +61,7 @@ exports.createLike = async (req, res, next) => {
 };
 
 //suppression du like
-exports.dislikeGif = (req, res, next) => {
+exports.dislikeGif = (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;
@@ -83,7 +83,7 @@ exports.dislikeGif = (req, res, next) => {
 };
 
 //récupération de tous les likes pour un user
-exports.getAllLikeUser = (req, res, next) => {
+exports.getAllLikeUser = (req, res) => {
     model.Gif_like.findAll({
         where: { userid: req.params.id },
     })
@@ -98,7 +98,7 @@ exports.getAllLikeUser = (req, res, next) => {
 };
 
 //récupération du like d'un user pour un un gif
-exports.getOneLikeUser = (req, res, next) => {
+exports.getOneLikeUser = (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET");
     const userId = decodedToken.userid;

@@ -9,22 +9,26 @@ schema
     .min(8)
     // Maximum 20 caractères
     .is()
-    .max(20)
+    .max(100)
     // au moins une majuscule
     .has()
     .uppercase()
     // au moins une minuscule
     .has()
     .lowercase()
-    // au moins 1 chiffres
+    // au moins 2 chiffres
     .has()
-    .digits(1)
+    .digits(2)
     // ne doit pas contenir d'espace
     .has()
     .not()
     .spaces()
     // au moins 1 symbol
     .has()
-    .symbols(1);
+    .symbols(1)
+    // Blacklist these values
+    .is()
+    .not()
+    .oneOf(["Passw0rd", "Password123", "azerty"]);
 
 module.exports = schema;
