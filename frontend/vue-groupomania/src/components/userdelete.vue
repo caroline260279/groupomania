@@ -26,7 +26,7 @@ export default {
     methods: {
         //suppression de l'utilisateur
         async deleteUser() {
-            let emailUserDelete = await instance
+            const emailUserDelete = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => resp.data.email)
                 .catch(() => console.log("erreur"));

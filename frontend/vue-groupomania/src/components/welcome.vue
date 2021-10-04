@@ -171,7 +171,7 @@ export default {
         },
         //rechercher un utilisateur
         async search() {
-            let user = this.user;
+            const user = this.user;
             instance
                 .get("http://localhost:3000/auth/user/" + user)
                 .then(() => this.$router.push("/username/" + user))

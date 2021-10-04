@@ -66,7 +66,7 @@ export default {
         },
         //affichage du gif à modifier
         gifModif() {
-            let gifIdToModif = this.$route.params.id;
+            const gifIdToModif = this.$route.params.id;
             instance
                 .get("http://localhost:3000/" + gifIdToModif)
                 .then((response) => (this.object = response.data))
@@ -74,7 +74,7 @@ export default {
         },
         //suppression du gif
         deleteGif() {
-            let gif = this.$route.params.id;
+            const gif = this.$route.params.id;
             instance
                 .delete("http://localhost:3000/delete/" + gif)
                 .then(() => this.$router.push("/allgifs"))
@@ -84,7 +84,7 @@ export default {
         },
         //mise à jour du gif
         updateGif() {
-            let gifIdToModif = this.$route.params.id;
+            const gifIdToModif = this.$route.params.id;
             const formData = new FormData();
             if (!(this.title === "")) {
                 formData.append("title", this.title);
@@ -113,17 +113,17 @@ export default {
         },
         //redirection aprés suppression du gif selon admin ou non
         async verif() {
-            let gifIdToModif = this.$route.params.id;
+            const gifIdToModif = this.$route.params.id;
 
-            let userid = await instance
+            const userid = await instance
                 .get("http://localhost:3000/" + gifIdToModif)
                 .then((response) => response.data.userid);
 
-            let useridFromToken = await instance
+            const useridFromToken = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((response) => response.data.id);
 
-            let caro = await instance
+            const caro = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((response) => response.data.admin);
 
@@ -138,8 +138,8 @@ export default {
         },
         //redirection si le gif n'existe pas
         async nogif() {
-            let gif = this.$route.params.id;
-            let gifexist = await instance
+            const gif = this.$route.params.id;
+            const gifexist = await instance
                 .get("http://localhost:3000/" + gif)
                 .then((response) => response.data.id);
             if (gifexist > 0) {

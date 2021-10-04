@@ -162,7 +162,7 @@ export default {
     methods: {
         //récupère l'ensemble de ses gifs de l'utilisateur sélectionné
         listGif() {
-            let username = this.$route.params.username;
+            const username = this.$route.params.username;
             instance
                 .get("http://localhost:3000/gif/" + username)
                 .then((response) => (this.object = response.data))
@@ -170,7 +170,7 @@ export default {
         },
         //commenter un gif
         createcomment(gif) {
-            let comment = { comment: this.comment };
+            const comment = { comment: this.comment };
             instance
                 .post("http://localhost:3000/comment/" + gif, comment)
                 .then(() => {
@@ -225,7 +225,7 @@ export default {
         },
         //renvoie si l'utilisateur connecté est l'administrateur
         async adminOrNot() {
-            let admin = await instance
+            const admin = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => resp.data.admin);
 
@@ -237,7 +237,7 @@ export default {
         },
         //liker le gif
         async like(gifid) {
-            let like = await instance
+            const like = await instance
                 .get("http://localhost:3000/getOneLike/" + gifid)
                 .then((resp) => resp.data.jaime);
             if (like != true) {

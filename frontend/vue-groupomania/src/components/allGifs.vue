@@ -221,7 +221,7 @@ export default {
         },
         //créer un commentaire
         createcomment(gif) {
-            let comment = { comment: this.comment };
+            const comment = { comment: this.comment };
             instance
                 .post("http://localhost:3000/comment/" + gif, comment)
                 .then(() => {
@@ -268,10 +268,13 @@ export default {
         },
         //liker le gif
         async like(gifid) {
-            let like = await instance
-                .get("http://localhost:3000/getOneLike/" + gifid)
-                .then((resp) => resp.data.jaime);
-            if (like != true) {
+            const like = await instance.get(
+                "http://localhost:3000/getOneLike/" + gifid
+            );
+
+            const likeTwo = like.data.jaime;
+
+            if (likeTwo != true) {
                 instance
                     .post("http://localhost:3000/like/" + gifid)
                     .then(() => {
@@ -287,12 +290,12 @@ export default {
         },
         //lien administrateur pour supprimer un gif
         async linkadmin(gifid) {
-            let admin = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.admin)
-                .catch(() => console.log("erreur"));
+            const admin = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
 
-            if (admin === true) {
+            const adminTwo = admin.data.admin;
+            if (adminTwo === true) {
                 this.$router.push("/gif/" + gifid);
             } else {
                 console.log(
@@ -302,25 +305,30 @@ export default {
         },
         //permettre a l'administrateur de supprimer un commentaire
         async adminComment() {
-            let userid = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.id);
-            let email = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.email);
-            if (email) {
-                this.userconnect = userid;
+            const userid = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
+            const useridTwo = userid.data.id;
+
+            const email = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
+
+            const emailTwo = email.data.email;
+            if (emailTwo) {
+                this.userconnect = useridTwo;
             } else {
-                this.userconnect = -userid;
+                this.userconnect = -useridTwo;
             }
         },
         //renvoie si l'utilisateur connecté est l'administrateur
         async adminOrNot() {
-            let admin = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.admin);
+            const admin = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
 
-            if (admin === true) {
+            const adminTwo = admin.data.admin;
+            if (adminTwo === true) {
                 this.admin = 1;
             } else {
                 this.admin = 0;

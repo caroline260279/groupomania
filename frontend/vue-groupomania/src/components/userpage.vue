@@ -55,7 +55,7 @@ export default {
     methods: {
         //récupération de l'utilisateur
         async user() {
-            let user = this.$route.params.username;
+            const user = this.$route.params.username;
             instance
                 .get("http://localhost:3000/auth/user/" + user)
                 .then((response) => (this.object = response.data))
@@ -70,8 +70,8 @@ export default {
         },
         //suppression de l'utilisateur
         async supprim() {
-            let user = this.$route.params.username;
-            let emailUserDelete = await instance
+            const user = this.$route.params.username;
+            const emailUserDelete = await instance
                 .get("http://localhost:3000/auth/user/" + user)
                 .then((response) => response.data.email);
             const useremail = { email: emailUserDelete };

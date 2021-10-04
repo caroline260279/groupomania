@@ -105,7 +105,7 @@ export default {
         },
         //validation des modifications
         async validModifUser() {
-            let user = await instance
+            const user = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => resp.data.id);
             const formData = new FormData();
@@ -122,11 +122,11 @@ export default {
         },
         //vérification que l'utilisateur connecté est l'utilisateur à modifier
         async verif() {
-            let id = await instance
+            const id = await instance
                 .get("http://localhost:3000/auth/user/connected/")
                 .then((resp) => resp.data.id)
                 .catch(() => console.log("erreur"));
-            let idparams = this.$route.params.id;
+            const idparams = this.$route.params.id;
             if (idparams != id) {
                 this.$router.push("/allgifs");
             } else {
