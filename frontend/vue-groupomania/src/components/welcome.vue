@@ -170,7 +170,7 @@ export default {
                 });
         },
         //rechercher un utilisateur
-        async search() {
+        search() {
             const user = this.user;
             instance
                 .get("http://localhost:3000/auth/user/" + user)

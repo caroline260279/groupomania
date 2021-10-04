@@ -89,12 +89,13 @@ export default {
         },
         //récupération de l'utilisateur à modifier (préremplissage des inputs)
         async user() {
-            const userConnected = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.id)
-                .catch(() => this.$router.push("/"));
+            const userConnected = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
+
+            const userConnectedTwo = userConnected.data.id;
             instance
-                .get("http://localhost:3000/auth/" + userConnected)
+                .get("http://localhost:3000/auth/" + userConnectedTwo)
                 .then((response) => (this.object = response.data));
         },
         continu: function() {
@@ -105,16 +106,18 @@ export default {
         },
         //validation des modifications
         async validModifUser() {
-            const user = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.id);
+            const user = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
+
+            const userTwo = user.data.id;
             const formData = new FormData();
             formData.append("username", this.object.username);
             formData.append("bio", this.object.bio);
             formData.append("email", this.object.email);
             formData.append("image", this.selectedFileModifUser);
             instance
-                .put("http://localhost:3000/auth/modify/" + user, formData)
+                .put("http://localhost:3000/auth/modify/" + userTwo, formData)
                 .then(() => this.$router.push("/welcome"))
                 .catch(() => {
                     this.display = "block";
@@ -122,12 +125,13 @@ export default {
         },
         //vérification que l'utilisateur connecté est l'utilisateur à modifier
         async verif() {
-            const id = await instance
-                .get("http://localhost:3000/auth/user/connected/")
-                .then((resp) => resp.data.id)
-                .catch(() => console.log("erreur"));
+            const id = await instance.get(
+                "http://localhost:3000/auth/user/connected/"
+            );
+
+            const idTwo = id.data.id;
             const idparams = this.$route.params.id;
-            if (idparams != id) {
+            if (idparams != idTwo) {
                 this.$router.push("/allgifs");
             } else {
                 console.log("vous n'avez pas à etre redirigé");

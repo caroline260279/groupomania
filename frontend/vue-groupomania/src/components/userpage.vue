@@ -54,12 +54,11 @@ export default {
     },
     methods: {
         //récupération de l'utilisateur
-        async user() {
+        user() {
             const user = this.$route.params.username;
             instance
                 .get("http://localhost:3000/auth/user/" + user)
                 .then((response) => (this.object = response.data))
-
                 .catch(() => this.$router.push("/"));
         },
         continu: function() {
