@@ -16,19 +16,15 @@ schema
     // au moins une minuscule
     .has()
     .lowercase()
-    // au moins 2 chiffres
+    // au moins 1 chiffres
     .has()
-    .digits(2)
+    .digits(1)
     // ne doit pas contenir d'espace
     .has()
     .not()
     .spaces()
     // au moins 1 symbol
     .has()
-    .symbols(1)
-    // Blacklist these values
-    .is()
-    .not()
-    .oneOf(["Passw0rd", "Password123", "azerty"]);
+    .symbols(1);
 
 module.exports = schema;

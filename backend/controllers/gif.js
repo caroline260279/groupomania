@@ -49,7 +49,7 @@ exports.modifyGif = async (req, res, next) => {
     const result = await model.Gif.findOne({
         where: { id: req.params.id },
     });
-    if (!(userId === result.userid)) {
+    if (userId !== result.userid) {
         return res.status(401).json({
             error: "Vous n'êtes pas autorisé à modifier ce gif !",
         });
@@ -103,7 +103,7 @@ exports.getAllGifUser = async (req, res, next) => {
     const userTofind = await model.User.findOne({
         where: { username: req.params.username },
     });
-    userId = userTofind.id;
+    const userId = userTofind.id;
     model.Gif.findAll({
         where: { userid: userId },
         order: [["updatedAt", "DESC"]],

@@ -60,9 +60,6 @@ export default {
     created() {
         this.clearStorage();
     },
-    Mounted() {
-        this.submit();
-    },
     methods: {
         //vide le local storage à l'ouverture de la page
         clearStorage() {
