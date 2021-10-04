@@ -295,7 +295,7 @@ export default {
             );
 
             const adminTwo = admin.data.admin;
-            if (adminTwo === true) {
+            if (adminTwo) {
                 this.$router.push("/gif/" + gifid);
             } else {
                 console.log(
@@ -328,7 +328,7 @@ export default {
             );
 
             const adminTwo = admin.data.admin;
-            if (adminTwo === true) {
+            if (adminTwo) {
                 this.admin = 1;
             } else {
                 this.admin = 0;
