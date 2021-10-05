@@ -2,10 +2,10 @@ Projet 7: Groupomania
 
 Cloner le projet
 
-Frontend: ouvir le terminal et executer la commande npm install puis npm start
+Frontend: ouvir le terminal et executer la commande npm install puis node server
 le serveur fonctionne sur http://localhost:3000
 
-Backend: ouvrir le terminal et executer la commande npm installe puis npm start
+Backend: ouvrir le terminal et executer la commande npm installe puis npm run start
 le serveur fonctionne sur http://localhost:8080
 
 Un dump de la base de donnée est présent dans le repository. Elle contient 2 utilisateurs. L'utilisateur Caroline 
